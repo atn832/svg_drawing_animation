@@ -37,8 +37,7 @@ Widget for drawing animation of SVG. For now, it only renders paths. Feel free t
 ### Basic Usage
 
 ```dart
-import 'package:animated_svg/animated_svg.dart';
-import 'package:animated_svg/svg_provider.dart';
+import 'package:svg_drawing_animation/svg_drawing_animation.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -55,7 +54,7 @@ class MyApp extends StatelessWidget {
         home: Scaffold(
             appBar: AppBar(title: const Text('Example')),
             body: Center(
-                child: AnimatedSvg(
+                child: SvgDrawingAnimation(
               SvgProviders.network(
                   'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
               duration: const Duration(seconds: 10),
@@ -75,7 +74,7 @@ MaterialApp(
           child: SizedBox(
               width: 300,
               height: 300,
-              child: AnimatedSvg(
+              child: SvgDrawingAnimation(
         SvgProviders.network(
             'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
         duration: const Duration(seconds: 10),
@@ -85,7 +84,7 @@ MaterialApp(
 ### With curves and repeat
 
 ```dart
-AnimatedSvg(
+SvgDrawingAnimation(
     SvgProviders.network(
         'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
     duration: const Duration(seconds: 10),
@@ -96,7 +95,7 @@ AnimatedSvg(
 ### Custom progress indicator
 
 ```dart
-AnimatedSvg(
+SvgDrawingAnimation(
     SvgProviders.network(
         'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
     loadingBuilder: (context) => Center(child: LinearProgressIndicator()))

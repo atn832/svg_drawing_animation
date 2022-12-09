@@ -1,5 +1,3 @@
-library svg_drawing_animation;
-
 import 'dart:io';
 
 import 'package:flutter/services.dart';

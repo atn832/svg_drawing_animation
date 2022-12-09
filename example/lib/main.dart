@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:svg_drawing_animation/svg_drawing_animation.dart';
-import 'package:svg_drawing_animation/svg_provider.dart';
 
 import 'kanji_svg.dart';
 
