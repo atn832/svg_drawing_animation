@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/parser.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:animated_svg/animated_svg.dart';
@@ -76,8 +76,11 @@ kvg:type CDATA #IMPLIED >
 
 void main() {
   test('length', () async {
-    expect(await AnimatedSvg.getPathLengthSum(lineSvg), 2);
-    expect((await AnimatedSvg.getPathLengthSum(kanjiSvg) - 455).abs(),
+    final parser = SvgParser();
+    expect(AnimatedSvg.getPathLengthSum(await parser.parse(lineSvg)), 2);
+    expect(
+        (AnimatedSvg.getPathLengthSum(await parser.parse(kanjiSvg)) - 455)
+            .abs(),
         lessThan(1));
   });
 
@@ -89,8 +92,11 @@ void main() {
       ),
       home: Scaffold(
           appBar: AppBar(title: const Text('Example')),
-          body: Column(children: [
-            AnimatedSvg(kanjiSvg),
+          body: Column(children: const [
+            AnimatedSvg(
+              kanjiSvg,
+              duration: Duration(seconds: 2),
+            ),
           ])),
     ));
     await widgetTester.pumpAndSettle();

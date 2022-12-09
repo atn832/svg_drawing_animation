@@ -98,16 +98,23 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
           appBar: AppBar(title: const Text('Example')),
-          body: Column(children: [
+          body: Column(children: const [
             SizedBox(
-              child: AnimatedSvg(kanjiSvg),
               width: 100,
               height: 100,
+              child: AnimatedSvg(
+                kanjiSvg,
+                duration: Duration(seconds: 2),
+              ),
             ),
             SizedBox(
-              child: AnimatedSvg(kanjiSvg),
               width: 200,
               height: 200,
+              child: AnimatedSvg(
+                kanjiSvg,
+                duration: Duration(seconds: 2),
+                repeats: true,
+              ),
             )
           ])),
     );

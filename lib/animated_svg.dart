@@ -10,12 +10,19 @@ import 'package:flutter_svg/parser.dart';
 import 'measure_path_length_canvas.dart';
 
 class AnimatedSvg extends StatefulWidget {
-  const AnimatedSvg(this.svgString, {super.key});
+  const AnimatedSvg(
+    this.svgString, {
+    super.key,
+    required this.duration,
+    this.repeats = false,
+  });
 
-  static Future<double> getPathLengthSum(String svgString) async {
-    final root = await SvgParser().parse(svgString);
+  final bool repeats;
+  final Duration duration;
+
+  static double getPathLengthSum(Drawable drawable) {
     final c = MeasurePathLengthCanvas(PictureRecorder());
-    root.draw(c, const Rect.fromLTRB(0, 0, 100, 100));
+    drawable.draw(c, const Rect.fromLTRB(0, 0, 100, 100));
     return c.pathLengthSum;
   }
 
@@ -29,14 +36,19 @@ class _AnimatedSvgState extends State<AnimatedSvg>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController controller;
+  bool isTotalPathLengthSet = false;
+  late final double totalPathLength;
 
   @override
   void initState() {
     super.initState();
-    controller =
-        AnimationController(duration: const Duration(seconds: 2), vsync: this);
-    animation = Tween<double>(begin: 0, end: 300).animate(controller);
-    controller.forward();
+    controller = AnimationController(duration: widget.duration, vsync: this);
+    animation = controller;
+    if (widget.repeats) {
+      controller.repeat();
+    } else {
+      controller.forward();
+    }
   }
 
   @override
@@ -53,12 +65,17 @@ class _AnimatedSvgState extends State<AnimatedSvg>
           if (snapshot.data == null) {
             return const CircularProgressIndicator();
           }
+          final drawable = snapshot.data!;
+          if (!isTotalPathLengthSet) {
+            totalPathLength = AnimatedSvg.getPathLengthSum(drawable);
+            isTotalPathLengthSet = true;
+          }
           return AnimatedBuilder(
               animation: animation,
               builder: (context, child) {
                 return CustomPaint(
                     painter: MyPainter(snapshot.data!,
-                        pathLengthLimit: animation.value));
+                        pathLengthLimit: animation.value * totalPathLength));
               });
         });
   }
