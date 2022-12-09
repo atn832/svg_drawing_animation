@@ -2,7 +2,7 @@
 
 Widget for drawing animation of SVG. For now, it only renders paths. Feel free to propose pull requests if you want to support a new feature.
 
-![video_demo](svg_drawing_animation.mov)
+![video_demo](https://github.com/atn832/svg_drawing_animation/blob/main/svg_drawing_animation.mov?raw=true)
 
 ## Features
 
