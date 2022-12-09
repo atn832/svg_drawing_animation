@@ -10,17 +10,20 @@ import 'package:flutter_svg/parser.dart';
 
 import 'measure_path_length_canvas.dart';
 
+Widget defaultLoadingBuilder(context) =>
+    const Center(child: CircularProgressIndicator());
+
 class AnimatedSvg extends StatefulWidget {
-  const AnimatedSvg(
-    this.drawableRoot, {
-    super.key,
-    required this.duration,
-    this.repeats = false,
-  });
+  const AnimatedSvg(this.drawableRoot,
+      {super.key,
+      required this.duration,
+      this.repeats = false,
+      this.loadingBuilder = defaultLoadingBuilder});
 
   final Future<DrawableRoot> drawableRoot;
   final bool repeats;
   final Duration duration;
+  final AnimatedSvgLoadingBuilder loadingBuilder;
 
   static double getPathLengthSum(Drawable drawable) {
     final c = MeasurePathLengthCanvas(PictureRecorder());
@@ -30,19 +33,25 @@ class AnimatedSvg extends StatefulWidget {
   }
 
   factory AnimatedSvg.string(String svgString,
-      {required duration, repeats = false}) {
+      {required Duration duration,
+      AnimatedSvgLoadingBuilder loadingBuilder = defaultLoadingBuilder,
+      bool repeats = false}) {
     return AnimatedSvg(
       SvgParser().parse(svgString),
       duration: duration,
+      loadingBuilder: loadingBuilder,
       repeats: repeats,
     );
   }
 
   factory AnimatedSvg.network(String src,
-      {required duration, repeats = false}) {
+      {required Duration duration,
+      AnimatedSvgLoadingBuilder loadingBuilder = defaultLoadingBuilder,
+      bool repeats = false}) {
     return AnimatedSvg(
       http.get(Uri.parse(src)).then((r) => SvgParser().parse(r.body)),
       duration: duration,
+      loadingBuilder: loadingBuilder,
       repeats: repeats,
     );
   }
@@ -82,7 +91,7 @@ class _AnimatedSvgState extends State<AnimatedSvg>
         future: widget.drawableRoot,
         builder: (context, snapshot) {
           if (snapshot.data == null) {
-            return const CircularProgressIndicator();
+            return widget.loadingBuilder(context);
           }
           final drawable = snapshot.data!;
           if (!isTotalPathLengthSet) {
@@ -121,3 +130,5 @@ class MyPainter extends CustomPainter {
     return true;
   }
 }
+
+typedef AnimatedSvgLoadingBuilder = Widget Function(BuildContext context);
