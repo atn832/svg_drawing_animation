@@ -80,7 +80,7 @@ class _AnimatedSvgState extends State<AnimatedSvg>
               builder: (context, child) {
                 return FittedBox(
                     child: SizedBox.fromSize(
-                        size: drawable.viewport.size,
+                        size: drawable.viewport.viewBox,
                         child: CustomPaint(
                             painter: MyPainter(snapshot.data!,
                                 pathLengthLimit:
@@ -98,11 +98,10 @@ class MyPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // TODO: compute proper bounds.
-    final bounds = drawableRoot.viewport.viewBoxRect;
     drawableRoot.draw(
         ClippedPathCanvasProxy(canvas, pathLengthLimit: pathLengthLimit),
-        bounds);
+        // `bounds` are not used according to [DrawableRoot.draw].
+        Rect.zero);
   }
 
   @override
