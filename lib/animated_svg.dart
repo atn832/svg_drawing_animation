@@ -1,14 +1,13 @@
 library animated_svg;
 
-import 'package:http/http.dart' as http;
 import 'dart:ui';
 
 import 'package:animated_svg/clipped_path_canvas_proxy.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_svg/parser.dart';
 
 import 'measure_path_length_canvas.dart';
+import 'svg_provider.dart';
 
 Widget defaultLoadingBuilder(context) =>
     const Center(child: CircularProgressIndicator());
@@ -20,7 +19,7 @@ class AnimatedSvg extends StatefulWidget {
       this.repeats = false,
       this.loadingBuilder = defaultLoadingBuilder});
 
-  final Future<DrawableRoot> drawableRoot;
+  final SvgProvider drawableRoot;
   final bool repeats;
   final Duration duration;
   final AnimatedSvgLoadingBuilder loadingBuilder;
@@ -30,30 +29,6 @@ class AnimatedSvg extends StatefulWidget {
     // TODO: pass proper values to bounds.
     drawable.draw(c, const Rect.fromLTRB(0, 0, 1, 1));
     return c.pathLengthSum;
-  }
-
-  factory AnimatedSvg.string(String svgString,
-      {required Duration duration,
-      AnimatedSvgLoadingBuilder loadingBuilder = defaultLoadingBuilder,
-      bool repeats = false}) {
-    return AnimatedSvg(
-      SvgParser().parse(svgString),
-      duration: duration,
-      loadingBuilder: loadingBuilder,
-      repeats: repeats,
-    );
-  }
-
-  factory AnimatedSvg.network(String src,
-      {required Duration duration,
-      AnimatedSvgLoadingBuilder loadingBuilder = defaultLoadingBuilder,
-      bool repeats = false}) {
-    return AnimatedSvg(
-      http.get(Uri.parse(src)).then((r) => SvgParser().parse(r.body)),
-      duration: duration,
-      loadingBuilder: loadingBuilder,
-      repeats: repeats,
-    );
   }
 
   @override

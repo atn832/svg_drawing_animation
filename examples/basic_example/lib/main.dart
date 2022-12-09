@@ -1,4 +1,5 @@
 import 'package:animated_svg/animated_svg.dart';
+import 'package:animated_svg/svg_provider.dart';
 import 'package:flutter/material.dart';
 
 const kanjiSvg = '''<?xml version="1.0" encoding="UTF-8"?>
@@ -102,16 +103,16 @@ class MyApp extends StatelessWidget {
             SizedBox(
               width: 50,
               height: 50,
-              child: AnimatedSvg.string(
-                kanjiSvg,
+              child: AnimatedSvg(
+                SvgProviders.string(kanjiSvg),
                 duration: Duration(seconds: 2),
               ),
             ),
             SizedBox(
               width: 100,
               height: 100,
-              child: AnimatedSvg.string(
-                kanjiSvg,
+              child: AnimatedSvg(
+                SvgProviders.string(kanjiSvg),
                 duration: Duration(seconds: 2),
                 repeats: true,
               ),
@@ -119,8 +120,9 @@ class MyApp extends StatelessWidget {
             SizedBox(
               width: 200,
               height: 200,
-              child: AnimatedSvg.network(
-                'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg',
+              child: AnimatedSvg(
+                SvgProviders.network(
+                    'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
                 duration: Duration(seconds: 10),
                 repeats: false,
               ),

@@ -1,3 +1,4 @@
+import 'package:animated_svg/svg_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/parser.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -93,8 +94,8 @@ void main() {
       home: Scaffold(
           appBar: AppBar(title: const Text('Example')),
           body: Column(children: [
-            AnimatedSvg.string(
-              kanjiSvg,
+            AnimatedSvg(
+              SvgProviders.string(kanjiSvg),
               duration: Duration(seconds: 2),
             ),
           ])),
