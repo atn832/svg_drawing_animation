@@ -9,7 +9,7 @@ import 'package:flutter_svg/parser.dart';
 
 import 'measure_path_length_canvas.dart';
 
-class AnimatedSvg extends StatelessWidget {
+class AnimatedSvg extends StatefulWidget {
   const AnimatedSvg(this.svgString, {super.key});
 
   static Future<double> getPathLengthSum(String svgString) async {
@@ -22,26 +22,59 @@ class AnimatedSvg extends StatelessWidget {
   final String svgString;
 
   @override
+  State<AnimatedSvg> createState() => _AnimatedSvgState();
+}
+
+class _AnimatedSvgState extends State<AnimatedSvg>
+    with SingleTickerProviderStateMixin {
+  late Animation<double> animation;
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller =
+        AnimationController(duration: const Duration(seconds: 2), vsync: this);
+    animation = Tween<double>(begin: 0, end: 300).animate(controller)
+      ..addListener(() {
+        setState(() {
+          // The state that has changed here is the animation object’s value.
+        });
+      });
+    controller.forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: SvgParser().parse(svgString),
+        future: SvgParser().parse(widget.svgString),
         builder: (context, snapshot) {
           if (snapshot.data == null) {
             return const CircularProgressIndicator();
           }
-          return CustomPaint(painter: MyPainter(snapshot.data!));
+          return CustomPaint(
+              painter:
+                  MyPainter(snapshot.data!, pathLengthLimit: animation.value));
         });
   }
 }
 
 class MyPainter extends CustomPainter {
-  MyPainter(this.drawableRoot);
+  MyPainter(this.drawableRoot, {required this.pathLengthLimit});
 
   final DrawableRoot drawableRoot;
+  final double pathLengthLimit;
 
   @override
   void paint(Canvas canvas, Size size) {
-    drawableRoot.draw(ClippedPathCanvasProxy(canvas, pathLengthLimit: 200),
+    drawableRoot.draw(
+        ClippedPathCanvasProxy(canvas, pathLengthLimit: pathLengthLimit),
         drawableRoot.viewport.viewBoxRect);
   }
 
