@@ -2,6 +2,8 @@
 
 Widget for drawing animation of SVG. For now, it only renders paths. Feel free to propose pull requests if you want to support a new feature.
 
+![video_demo](svg_drawing_animation.mov)
+
 ## Features
 
 - load an SVG from any source (string, network...).
@@ -48,9 +50,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
         home: Scaffold(
             appBar: AppBar(title: const Text('Example')),
             body: Center(
@@ -68,9 +67,6 @@ class MyApp extends StatelessWidget {
 ```dart
 MaterialApp(
   title: 'Flutter Demo',
-  theme: ThemeData(
-    primarySwatch: Colors.blue,
-  ),
   home: Scaffold(
       appBar: AppBar(title: const Text('Example')),
       body: Center(
