@@ -8,16 +8,18 @@ Widget for drawing animation of SVG. For now, it only renders paths. Feel free t
 
 ## Features
 
-- load an SVG from any source (string, network...).
+- load SVG from any source (string, network...). See built-in [SVG Providers](https://pub.dev/documentation/svg_drawing_animation/latest/svg_drawing_animation/SvgProviders-class.html#static-methods).
 - supports [Duration](https://api.flutter.dev/flutter/dart-core/Duration-class.html).
 - supports [Curves](https://api.flutter.dev/flutter/animation/Curve-class.html).
 - customizable loading state.
 
+See [SvgDrawingAnimation](https://pub.dev/documentation/svg_drawing_animation/latest/svg_drawing_animation/SvgDrawingAnimation-class.html) for more.
+
 ## Difference with other packages
 
 - [drawing_animation](https://pub.dartlang.org/packages/drawing_animation) served as inspiration for this package. Check out the table below for differences.
-- [flutter_svg](https://pub.dev/packages/flutter_svg) provides a Widget to render static SVGs. We use flutter_svg to parse SVG.
-- [animated_svg](https://pub.dev/packages/animated_svg) makes smooth transitions between two different SVGs.
+- [flutter_svg](https://pub.dev/packages/flutter_svg) provides a Widget to render static SVG. We use flutter_svg to parse SVG.
+- [animated_svg](https://pub.dev/packages/animated_svg) makes smooth transitions between two different SVG.
 
 | Feature | this package | drawing_animation |
 | --- | --- | --- |
@@ -103,7 +105,7 @@ SvgDrawingAnimation(
 
 ## Design choices
 
-### Duration, Curve, repeats
+### Constructor parameters: Duration, Curve, repeats
 
 We've followed the style of [ImplicitAnimations](https://api.flutter.dev/flutter/widgets/ImplicitlyAnimatedWidget-class.html), which take a [Duration](https://api.flutter.dev/flutter/dart-core/Duration-class.html), a [Curve](https://api.flutter.dev/flutter/animation/Curve-class.html) and a `repeats` flag similar to [AnimatedRotation's turns](https://api.flutter.dev/flutter/widgets/AnimatedRotation/turns.html). This allows for a good amount of customization without having to mess with AnimationControllers and StatefulWidgets.
 

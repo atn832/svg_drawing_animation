@@ -22,12 +22,23 @@ class SvgDrawingAnimation extends StatefulWidget {
       this.repeats = false,
       this.loadingBuilder = defaultLoadingBuilder});
 
+  /// The SVG to display.
   final SvgProvider drawableRoot;
+
+  /// Whether the animation plays once or repeats indefinitely.
   final bool repeats;
+
+  /// The duration over which to animate.
   final Duration duration;
+
+  /// The curve to apply when animating.
   final Curve curve;
+
+  /// A builder that specifies the widget to display to the user while the SVG
+  /// is still loading.
   final AnimatedSvgLoadingBuilder loadingBuilder;
 
+  /// Computes the total length of paths in some SVG.
   static double getPathLengthSum(Drawable drawable) {
     final c = MeasurePathLengthCanvas(PictureRecorder());
     // TODO: pass proper values to bounds.
