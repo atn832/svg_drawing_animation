@@ -98,24 +98,33 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
           appBar: AppBar(title: const Text('Example')),
-          body: Column(children: const [
+          body: Column(children: [
             SizedBox(
-              width: 100,
-              height: 100,
-              child: AnimatedSvg(
+              width: 50,
+              height: 50,
+              child: AnimatedSvg.string(
                 kanjiSvg,
                 duration: Duration(seconds: 2),
               ),
             ),
             SizedBox(
-              width: 200,
-              height: 200,
-              child: AnimatedSvg(
+              width: 100,
+              height: 100,
+              child: AnimatedSvg.string(
                 kanjiSvg,
                 duration: Duration(seconds: 2),
                 repeats: true,
               ),
-            )
+            ),
+            SizedBox(
+              width: 200,
+              height: 200,
+              child: AnimatedSvg.network(
+                'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg',
+                duration: Duration(seconds: 10),
+                repeats: false,
+              ),
+            ),
           ])),
     );
   }

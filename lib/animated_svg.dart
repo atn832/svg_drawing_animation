@@ -1,5 +1,6 @@
 library animated_svg;
 
+import 'package:http/http.dart' as http;
 import 'dart:ui';
 
 import 'package:animated_svg/clipped_path_canvas_proxy.dart';
@@ -11,12 +12,13 @@ import 'measure_path_length_canvas.dart';
 
 class AnimatedSvg extends StatefulWidget {
   const AnimatedSvg(
-    this.svgString, {
+    this.drawableRoot, {
     super.key,
     required this.duration,
     this.repeats = false,
   });
 
+  final Future<DrawableRoot> drawableRoot;
   final bool repeats;
   final Duration duration;
 
@@ -27,7 +29,23 @@ class AnimatedSvg extends StatefulWidget {
     return c.pathLengthSum;
   }
 
-  final String svgString;
+  factory AnimatedSvg.string(String svgString,
+      {required duration, repeats = false}) {
+    return AnimatedSvg(
+      SvgParser().parse(svgString),
+      duration: duration,
+      repeats: repeats,
+    );
+  }
+
+  factory AnimatedSvg.network(String src,
+      {required duration, repeats = false}) {
+    return AnimatedSvg(
+      http.get(Uri.parse(src)).then((r) => SvgParser().parse(r.body)),
+      duration: duration,
+      repeats: repeats,
+    );
+  }
 
   @override
   State<AnimatedSvg> createState() => _AnimatedSvgState();
@@ -61,7 +79,7 @@ class _AnimatedSvgState extends State<AnimatedSvg>
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: SvgParser().parse(widget.svgString),
+        future: widget.drawableRoot,
         builder: (context, snapshot) {
           if (snapshot.data == null) {
             return const CircularProgressIndicator();

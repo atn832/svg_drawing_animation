@@ -92,8 +92,8 @@ void main() {
       ),
       home: Scaffold(
           appBar: AppBar(title: const Text('Example')),
-          body: Column(children: const [
-            AnimatedSvg(
+          body: Column(children: [
+            AnimatedSvg.string(
               kanjiSvg,
               duration: Duration(seconds: 2),
             ),
