@@ -1,5 +1,5 @@
 name: svg_drawing_animation
-description: Draws animated SVG paths.
+description: Widget for drawing animation of SVG.
 version: 0.9.0
 repository: https://github.com/atn832/svg_drawing_animation
 homepage: https://www.wafrat.com

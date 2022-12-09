@@ -1,19 +1,32 @@
 # SVG Drawing Animation
 
-Draws animated SVG paths. For now, it ignores any other shapes. Feel free to propose pull requests if you want to support a new feature.
-
-## Difference with other packages
-
-- [flutter_svg](https://pub.dev/packages/flutter_svg). flutter_svg provides a Widget to render static SVGs. svg_drawing_animation uses flutter_svg to parse SVG.
-- [drawing_animation](https://pub.dartlang.org/packages/drawing_animation). While svg_drawing_animation is heavily inspired from it, svg_drawing_animation supports more features such as loading an SVG on the network or files, recursive stroke styles (eg a stroke style on a group applies to all child paths)...
-- [animated_svg](https://pub.dev/packages/animated_svg) makes smooth transitions between two different SVGs.
+Widget for drawing animation of SVG. For now, it only renders paths. Feel free to propose pull requests if you want to support a new feature.
 
 ## Features
 
-- load an SVG by string or network.
+- load an SVG from any source (string, network...).
 - supports [Duration](https://api.flutter.dev/flutter/dart-core/Duration-class.html).
 - supports [Curves](https://api.flutter.dev/flutter/animation/Curve-class.html).
 - customizable loading state.
+
+## Difference with other packages
+
+- [drawing_animation](https://pub.dartlang.org/packages/drawing_animation) served as inspiration for this package. Check out the table below for differences.
+- [flutter_svg](https://pub.dev/packages/flutter_svg) provides a Widget to render static SVGs. We use flutter_svg to parse SVG.
+- [animated_svg](https://pub.dev/packages/animated_svg) makes smooth transitions between two different SVGs.
+
+| Feature | this package | drawing_animation |
+| --- | --- | --- |
+| Draws animations of SVG | ✅ | ✅ |
+| Load SVG from String | ✅ | ❌ |
+| Load SVG from Network | ✅ | ❌ |
+| Load SVG from Assets | ✅ | ✅ |
+| Load SVG from other sources (File...) | ✅ | ❌ |
+| Recursive style (eg a group's style applies to its children) | ✅ | ❌ |
+| Duration | ✅ | ✅ |
+| Curve | ✅ | ✅ |
+| repeats | ✅ | ✅ |
+| Line orders (in order, all at once, top to bottom...) | ❌ | ✅ |
 
 ## Usage
 
@@ -79,11 +92,30 @@ AnimatedSvg(
         'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
     duration: const Duration(seconds: 10),
     curve: Curves.decelerate,
-    repeats: true,
+    repeats: true)
+```
+
+### Custom progress indicator
+
+```dart
+AnimatedSvg(
+    SvgProviders.network(
+        'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
+    loadingBuilder: (context) => Center(child: LinearProgressIndicator()))
 ```
 
 ## Design choices
 
-We've followed the style of [ImplicitAnimations](https://api.flutter.dev/flutter/widgets/ImplicitlyAnimatedWidget-class.html), which take a [Duration](https://api.flutter.dev/flutter/dart-core/Duration-class.html), a [Curve](https://api.flutter.dev/flutter/animation/Curve-class.html) and a `repeats` flag similar to [AnimatedRotation's turns](https://api.flutter.dev/flutter/widgets/AnimatedRotation/turns.html). This allows for a good amount of customization without having to mess with Animations and StatefulWidgets.
+### Duration, Curve, repeats
+
+We've followed the style of [ImplicitAnimations](https://api.flutter.dev/flutter/widgets/ImplicitlyAnimatedWidget-class.html), which take a [Duration](https://api.flutter.dev/flutter/dart-core/Duration-class.html), a [Curve](https://api.flutter.dev/flutter/animation/Curve-class.html) and a `repeats` flag similar to [AnimatedRotation's turns](https://api.flutter.dev/flutter/widgets/AnimatedRotation/turns.html). This allows for a good amount of customization without having to mess with AnimationControllers and StatefulWidgets.
 
 See <https://docs.flutter.dev/development/ui/animations> for comprehensive information on animations.
+
+### SvgProvider
+
+Flutter's [Image widget](https://api.flutter.dev/flutter/widgets/Image-class.html) uses an [ImageProvider](https://api.flutter.dev/flutter/painting/ImageProvider-class.html), while flutter_svg's [SvgPicture](https://pub.dev/documentation/flutter_svg/latest/svg/SvgPicture-class.html) uses a similar [PictureProvider](https://pub.dev/documentation/flutter_svg/latest/flutter_svg/PictureProvider-class.html) pattern. That kind of architecture is quite advanced but produces too much code. So we've opted for a typedef that is easy to implement:
+
+```dart
+typedef SvgProvider = Future<DrawableRoot>;
+```
