@@ -1,5 +1,7 @@
 # SVG Drawing Animation
 
+[![pub package](https://img.shields.io/pub/v/svg_drawing_animation.svg)](https://pub.dartlang.org/packages/svg_drawing_animation)
+
 Widget for drawing animation of SVG. For now, it only renders paths. Feel free to propose pull requests if you want to support a new feature.
 
 ![video_demo](svg_drawing_animation.gif)
