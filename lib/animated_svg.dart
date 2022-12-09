@@ -22,7 +22,8 @@ class AnimatedSvg extends StatefulWidget {
 
   static double getPathLengthSum(Drawable drawable) {
     final c = MeasurePathLengthCanvas(PictureRecorder());
-    drawable.draw(c, const Rect.fromLTRB(0, 0, 100, 100));
+    // TODO: pass proper values to bounds.
+    drawable.draw(c, const Rect.fromLTRB(0, 0, 1, 1));
     return c.pathLengthSum;
   }
 
@@ -89,9 +90,11 @@ class MyPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    // TODO: compute proper bounds.
+    final bounds = drawableRoot.viewport.viewBoxRect;
     drawableRoot.draw(
         ClippedPathCanvasProxy(canvas, pathLengthLimit: pathLengthLimit),
-        drawableRoot.viewport.viewBoxRect);
+        bounds);
   }
 
   @override
