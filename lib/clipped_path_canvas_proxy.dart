@@ -12,8 +12,7 @@ class ClippedPathCanvasProxy implements Canvas {
 
   @override
   void drawPath(Path path, Paint paint) {
-    final transformedPath = path.transform(getTransform());
-    transformedPath.computeMetrics().forEach((contourMetrics) {
+    path.computeMetrics().forEach((contourMetrics) {
       final lengthToDraw =
           min(pathLengthLimit - drawnPathLength, contourMetrics.length);
       // Pass-through draw.
@@ -47,7 +46,6 @@ class ClippedPathCanvasProxy implements Canvas {
   @override
   dynamic noSuchMethod(Invocation invocation) {
     // Ignore missing implementations.
-
     // super.noSuchMethod(invocation);
   }
 }

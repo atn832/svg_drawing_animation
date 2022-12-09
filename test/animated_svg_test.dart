@@ -96,7 +96,7 @@ void main() {
           body: Column(children: [
             AnimatedSvg(
               SvgProviders.string(kanjiSvg),
-              duration: Duration(seconds: 2),
+              duration: const Duration(seconds: 2),
             ),
           ])),
     ));

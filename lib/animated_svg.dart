@@ -78,9 +78,13 @@ class _AnimatedSvgState extends State<AnimatedSvg>
           return AnimatedBuilder(
               animation: animation,
               builder: (context, child) {
-                return CustomPaint(
-                    painter: MyPainter(snapshot.data!,
-                        pathLengthLimit: animation.value * totalPathLength));
+                return FittedBox(
+                    child: SizedBox.fromSize(
+                        size: drawable.viewport.size,
+                        child: CustomPaint(
+                            painter: MyPainter(snapshot.data!,
+                                pathLengthLimit:
+                                    animation.value * totalPathLength))));
               });
         });
   }

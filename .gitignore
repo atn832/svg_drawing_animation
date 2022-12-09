@@ -28,3 +28,5 @@ pubspec.lock
 .dart_tool/
 .packages
 build/
+# Screenshot test outputs.
+test/failures/
