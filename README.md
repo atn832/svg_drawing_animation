@@ -1,6 +1,12 @@
-# Flutter Animated SVG
+# SVG Drawing Animation
 
 Draws animated SVG paths. For now, it ignores any other shapes. Feel free to propose pull requests if you want to support a new feature.
+
+## Difference with other packages
+
+- [flutter_svg](https://pub.dev/packages/flutter_svg). flutter_svg provides a Widget to render static SVGs. svg_drawing_animation uses flutter_svg to parse SVG.
+- [drawing_animation](https://pub.dartlang.org/packages/drawing_animation). While svg_drawing_animation is heavily inspired from it, svg_drawing_animation supports more features such as loading an SVG on the network or files, recursive stroke styles (eg a stroke style on a group applies to all child paths)...
+- [animated_svg](https://pub.dev/packages/animated_svg) makes smooth transitions between two different SVGs.
 
 ## Features
 

@@ -1,6 +1,6 @@
 name: svg_drawing_animation
-description: A new Flutter package project.
-version: 0.0.1
+description: Draws animated SVG paths.
+version: 0.9.0
 repository: https://github.com/atn832/svg_drawing_animation
 homepage: https://www.wafrat.com
 

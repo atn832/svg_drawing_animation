@@ -1,19 +1,23 @@
-library animated_svg;
+library svg_drawing_animation;
 
 import 'dart:ui';
 
-import 'package:animated_svg/clipped_path_canvas_proxy.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'measure_path_length_canvas.dart';
+import 'clipped_path_painter.dart';
 import 'svg_provider.dart';
 
+typedef AnimatedSvgLoadingBuilder = Widget Function(BuildContext context);
+
+/// A builder that renders a [CircularProgressIndicator].
 Widget defaultLoadingBuilder(context) =>
     const Center(child: CircularProgressIndicator());
 
-class AnimatedSvg extends StatefulWidget {
-  const AnimatedSvg(this.drawableRoot,
+/// A widget that displays a drawing animation of SVG.
+class SvgDrawingAnimation extends StatefulWidget {
+  const SvgDrawingAnimation(this.drawableRoot,
       {super.key,
       required this.duration,
       this.curve = Curves.linear,
@@ -34,10 +38,10 @@ class AnimatedSvg extends StatefulWidget {
   }
 
   @override
-  State<AnimatedSvg> createState() => _AnimatedSvgState();
+  State<SvgDrawingAnimation> createState() => _SvgDrawingAnimationState();
 }
 
-class _AnimatedSvgState extends State<AnimatedSvg>
+class _SvgDrawingAnimationState extends State<SvgDrawingAnimation>
     with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController controller;
@@ -72,7 +76,7 @@ class _AnimatedSvgState extends State<AnimatedSvg>
           }
           final drawable = snapshot.data!;
           if (!isTotalPathLengthSet) {
-            totalPathLength = AnimatedSvg.getPathLengthSum(drawable);
+            totalPathLength = SvgDrawingAnimation.getPathLengthSum(drawable);
             isTotalPathLengthSet = true;
           }
           return AnimatedBuilder(
@@ -82,33 +86,10 @@ class _AnimatedSvgState extends State<AnimatedSvg>
                     child: SizedBox.fromSize(
                         size: drawable.viewport.viewBox,
                         child: CustomPaint(
-                            painter: MyPainter(snapshot.data!,
+                            painter: ClippedPathPainter(snapshot.data!,
                                 pathLengthLimit:
                                     animation.value * totalPathLength))));
               });
         });
   }
 }
-
-class MyPainter extends CustomPainter {
-  MyPainter(this.drawableRoot, {required this.pathLengthLimit});
-
-  final DrawableRoot drawableRoot;
-  final double pathLengthLimit;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    drawableRoot.draw(
-        ClippedPathCanvasProxy(canvas, pathLengthLimit: pathLengthLimit),
-        // `bounds` are not used according to [DrawableRoot.draw].
-        Rect.zero);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    // TODO: optimize?
-    return true;
-  }
-}
-
-typedef AnimatedSvgLoadingBuilder = Widget Function(BuildContext context);

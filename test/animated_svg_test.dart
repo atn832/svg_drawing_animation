@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:animated_svg/animated_svg.dart';
-import 'package:animated_svg/svg_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/parser.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:svg_drawing_animation/svg_drawing_animation.dart';
+import 'package:svg_drawing_animation/svg_provider.dart';
 
 import 'kanji_svg.dart';
 
@@ -18,9 +18,11 @@ const lineSvg = '''<svg height="10" width="10">
 void main() {
   test('length', () async {
     final parser = SvgParser();
-    expect(AnimatedSvg.getPathLengthSum(await parser.parse(lineSvg)), 2);
     expect(
-        (AnimatedSvg.getPathLengthSum(await parser.parse(kanjiSvg)) - 455)
+        SvgDrawingAnimation.getPathLengthSum(await parser.parse(lineSvg)), 2);
+    expect(
+        (SvgDrawingAnimation.getPathLengthSum(await parser.parse(kanjiSvg)) -
+                455)
             .abs(),
         lessThan(1));
   });
@@ -50,7 +52,7 @@ Future<void> renderAndCheckGoldens(WidgetTester widgetTester,
             child: SizedBox(
               width: 300,
               height: 300,
-              child: AnimatedSvg(
+              child: SvgDrawingAnimation(
                 svgProvider,
                 duration: const Duration(milliseconds: 500),
                 repeats: false,
