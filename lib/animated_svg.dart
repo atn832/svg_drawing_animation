@@ -16,12 +16,14 @@ class AnimatedSvg extends StatefulWidget {
   const AnimatedSvg(this.drawableRoot,
       {super.key,
       required this.duration,
+      this.curve = Curves.linear,
       this.repeats = false,
       this.loadingBuilder = defaultLoadingBuilder});
 
   final SvgProvider drawableRoot;
   final bool repeats;
   final Duration duration;
+  final Curve curve;
   final AnimatedSvgLoadingBuilder loadingBuilder;
 
   static double getPathLengthSum(Drawable drawable) {
@@ -46,7 +48,7 @@ class _AnimatedSvgState extends State<AnimatedSvg>
   void initState() {
     super.initState();
     controller = AnimationController(duration: widget.duration, vsync: this);
-    animation = controller;
+    animation = CurvedAnimation(parent: controller, curve: widget.curve);
     if (widget.repeats) {
       controller.repeat();
     } else {

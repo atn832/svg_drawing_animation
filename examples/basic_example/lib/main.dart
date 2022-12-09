@@ -106,6 +106,7 @@ class MyApp extends StatelessWidget {
               child: AnimatedSvg(
                 SvgProviders.string(kanjiSvg),
                 duration: Duration(seconds: 2),
+                repeats: true,
               ),
             ),
             SizedBox(
@@ -114,6 +115,7 @@ class MyApp extends StatelessWidget {
               child: AnimatedSvg(
                 SvgProviders.string(kanjiSvg),
                 duration: Duration(seconds: 2),
+                curve: Curves.decelerate,
                 repeats: true,
               ),
             ),
