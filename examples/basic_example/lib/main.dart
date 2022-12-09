@@ -1,6 +1,5 @@
 import 'package:animated_svg/animated_svg.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 const kanjiSvg = '''<?xml version="1.0" encoding="UTF-8"?>
 <!--
@@ -102,8 +101,13 @@ class MyApp extends StatelessWidget {
           body: Column(children: [
             SizedBox(
               child: AnimatedSvg(kanjiSvg),
-              width: 200, height: 200,
-              // SvgPicture.string(kanjiSvg),
+              width: 100,
+              height: 100,
+            ),
+            SizedBox(
+              child: AnimatedSvg(kanjiSvg),
+              width: 200,
+              height: 200,
             )
           ])),
     );

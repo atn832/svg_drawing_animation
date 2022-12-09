@@ -4,15 +4,13 @@ import 'dart:ui';
 
 import 'package:animated_svg/clipped_path_canvas_proxy.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/parser.dart';
 
 import 'measure_path_length_canvas.dart';
 
-/// A Calculator.
 class AnimatedSvg extends StatelessWidget {
-  AnimatedSvg(this.svgString, {super.key});
+  const AnimatedSvg(this.svgString, {super.key});
 
   static Future<double> getPathLengthSum(String svgString) async {
     final root = await SvgParser().parse(svgString);
@@ -22,7 +20,6 @@ class AnimatedSvg extends StatelessWidget {
   }
 
   final String svgString;
-  late Future<DrawableRoot> r;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +31,6 @@ class AnimatedSvg extends StatelessWidget {
           }
           return CustomPaint(painter: MyPainter(snapshot.data!));
         });
-    // return SvgPicture.string(svgString);
   }
 }
 
