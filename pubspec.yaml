@@ -1,7 +1,8 @@
-name: animated_svg
+name: svg_drawing_animation
 description: A new Flutter package project.
 version: 0.0.1
-homepage:
+repository: https://github.com/atn832/svg_drawing_animation
+homepage: https://www.wafrat.com
 
 environment:
   sdk: '>=2.19.0-374.1.beta <3.0.0'
