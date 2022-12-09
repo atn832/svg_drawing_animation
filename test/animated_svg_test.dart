@@ -30,11 +30,8 @@ void main() {
   testWidgets('rendering', (widgetTester) async {
     await renderAndCheckGoldens(
         widgetTester, 'kanji', SvgProviders.string(kanjiSvg));
-    await renderAndCheckGoldens(
-        widgetTester,
-        'elephant',
-        SvgParser()
-            .parse(File('test/African_Elephant.svg').readAsStringSync()));
+    await renderAndCheckGoldens(widgetTester, 'elephant',
+        SvgProviders.file(File('test/African_Elephant.svg')));
   });
 }
 
