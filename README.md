@@ -4,7 +4,7 @@
 
 Widget for drawing animation of SVG. For now, it only renders paths. Feel free to propose pull requests if you want to support a new feature.
 
-![video_demo](svg_drawing_animation.gif)
+<img src="https://github.com/atn832/svg_drawing_animation/raw/main/svg_drawing_animation.gif" width="360" />
 
 ## Features
 
