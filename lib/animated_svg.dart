@@ -35,12 +35,7 @@ class _AnimatedSvgState extends State<AnimatedSvg>
     super.initState();
     controller =
         AnimationController(duration: const Duration(seconds: 2), vsync: this);
-    animation = Tween<double>(begin: 0, end: 300).animate(controller)
-      ..addListener(() {
-        setState(() {
-          // The state that has changed here is the animation object’s value.
-        });
-      });
+    animation = Tween<double>(begin: 0, end: 300).animate(controller);
     controller.forward();
   }
 
@@ -58,9 +53,13 @@ class _AnimatedSvgState extends State<AnimatedSvg>
           if (snapshot.data == null) {
             return const CircularProgressIndicator();
           }
-          return CustomPaint(
-              painter:
-                  MyPainter(snapshot.data!, pathLengthLimit: animation.value));
+          return AnimatedBuilder(
+              animation: animation,
+              builder: (context, child) {
+                return CustomPaint(
+                    painter: MyPainter(snapshot.data!,
+                        pathLengthLimit: animation.value));
+              });
         });
   }
 }
