@@ -118,3 +118,7 @@ Flutter's [Image widget](https://api.flutter.dev/flutter/widgets/Image-class.htm
 ```dart
 typedef SvgProvider = Future<DrawableRoot>;
 ```
+
+### Loading and Error states
+
+We allow custom rendering of loading and error states similar to Image's [ImageLoadingBuilder](https://api.flutter.dev/flutter/widgets/ImageLoadingBuilder.html) and [ImageErrorWidgetBuilder](https://api.flutter.dev/flutter/widgets/ImageErrorWidgetBuilder.html).
