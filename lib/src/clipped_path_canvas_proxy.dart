@@ -13,27 +13,36 @@ class ClippedPathCanvasProxy implements Canvas {
 
   @override
   void drawPath(Path path, Paint paint) {
-    path.computeMetrics().forEach((contourMetrics) {
+    for (final contourMetrics in path.computeMetrics()) {
+      // Compute how much we're allowed to draw.
       final lengthToDraw =
           min(pathLengthLimit - drawnPathLength, contourMetrics.length);
-      // Pass-through draw.
-      if (lengthToDraw > 0) {
-        final pathToDraw = contourMetrics.extractPath(0, lengthToDraw);
-        canvas.drawPath(pathToDraw, paint);
 
-        final isFinalStroke = lengthToDraw < contourMetrics.length;
-        if (isFinalStroke) {
-          // Render the pen's tip.
-          final tip = contourMetrics.extractPath(lengthToDraw, lengthToDraw,
-              startWithMoveTo: true);
-          tip.addOval(
-              Rect.fromCircle(center: tip.getBounds().center, radius: 10));
-          final tipPaint = Paint()..color = Colors.red;
-          canvas.drawPath(tip, tipPaint);
-        }
+      // If we can't draw anymore, abort.
+      if (lengthToDraw == 0) {
+        break;
       }
+
+      // Pass-through draw.
+      final pathToDraw = contourMetrics.extractPath(0, lengthToDraw);
+      canvas.drawPath(pathToDraw, paint);
       drawnPathLength += lengthToDraw;
-    });
+
+      // If we drew less than the full contour length, it means we've reached
+      // [pathLengthLimit] and the end of the current contour is where the "pen"
+      // is.
+      final isFinalStroke = lengthToDraw < contourMetrics.length;
+      if (isFinalStroke) {
+        final pathEndPoint = contourMetrics
+            .extractPath(lengthToDraw, lengthToDraw, startWithMoveTo: true);
+        final tipPosition = pathEndPoint.getBounds().center;
+        pathEndPoint.moveTo(tipPosition.dx, tipPosition.dy);
+        pathEndPoint.addOval(Rect.fromCircle(center: tipPosition, radius: 10));
+        final tipPaint = Paint()..color = Colors.red;
+        // Render the pen's tip.
+        canvas.drawPath(pathEndPoint, tipPaint);
+      }
+    }
   }
 
   @override
