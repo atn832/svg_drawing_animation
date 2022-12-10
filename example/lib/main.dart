@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              const Text('Red drawing marker'),
+              const Text('Draw the Pen'),
               Card(
                 child: SizedBox(
                   width: 100,
@@ -56,19 +56,7 @@ class MyApp extends StatelessWidget {
                     SvgProviders.network(
                         'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
                     duration: const Duration(seconds: 10),
-                    repeats: true,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Text('Error handling'),
-              Card(
-                child: SizedBox(
-                  width: 300,
-                  height: 30,
-                  child: SvgDrawingAnimation(
-                    SvgProviders.string('<some invalid svg'),
-                    duration: const Duration(seconds: 10),
+                    // repeats: true,
                   ),
                 ),
               ),

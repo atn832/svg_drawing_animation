@@ -22,7 +22,7 @@ See [SvgDrawingAnimation](https://pub.dev/documentation/svg_drawing_animation/la
 - [flutter_svg](https://pub.dev/packages/flutter_svg) provides a Widget to render static SVG. We use flutter_svg to parse SVG.
 - [animated_svg](https://pub.dev/packages/animated_svg) makes smooth transitions between two different SVG.
 
-| Feature | this package | drawing_animation |
+| Feature | this package | drawing animation |
 | --- | --- | --- |
 | Draws animations of SVG | ✅ | ✅ |
 | Load SVG from String | ✅ | ❌ |
@@ -30,10 +30,8 @@ See [SvgDrawingAnimation](https://pub.dev/documentation/svg_drawing_animation/la
 | Load SVG from Assets | ✅ | ✅ |
 | Load SVG from File | ✅ | ❌ |
 | Recursive style (eg a group's style applies to its children) | ✅ | ❌ |
-| Duration | ✅ | ✅ |
-| Curve | ✅ | ✅ |
-| repeats | ✅ | ✅ |
-| Draw the Pen | ✅ | ❌ |
+| Duration, Curve, repeats | ✅ | ✅ |
+| Draws the Pen | ✅ | ❌ |
 | Line orders (in order, all at once, top to bottom...) | ❌ | ✅ |
 
 ## Usage
@@ -102,7 +100,28 @@ SvgDrawingAnimation(
 SvgDrawingAnimation(
     SvgProviders.network(
         'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
-    loadingBuilder: (context) => Center(child: LinearProgressIndicator()))
+    duration: const Duration(seconds: 4),
+    loadingWidgetBuilder: (context) => Center(child: LinearProgressIndicator()))
+```
+
+### Custom error handling
+
+```dart
+SvgDrawingAnimation(
+    SvgProviders.network(
+        'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
+    duration: const Duration(seconds: 4),
+    errorWidgetBuilder: (context) => Text('Oops! Something went wrong.'))
+```
+
+### Drawing the Pen
+
+```dart
+SvgDrawingAnimation(
+    SvgProviders.network(
+        'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
+    duration: const Duration(seconds: 4),
+    penRenderer: CirclePenRenderer(radius: 15))
 ```
 
 ## Design choices

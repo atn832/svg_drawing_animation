@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'pen_renderer.dart';
 
+/// A [PenRenderer] that draws a circle.
 class CirclePenRenderer implements PenRenderer {
   CirclePenRenderer({required this.radius, this.paint});
 

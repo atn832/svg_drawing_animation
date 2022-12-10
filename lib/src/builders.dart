@@ -15,4 +15,4 @@ Widget defaultErrorWidgetBuilder(
   Object error,
   StackTrace? stackTrace,
 ) =>
-    Center(child: Text(error.toString()));
+    Center(child: Text('Unable to load SVG: $error'));
