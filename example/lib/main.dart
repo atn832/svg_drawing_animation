@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
                     SvgProviders.network(
                         'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
                     duration: const Duration(seconds: 10),
-                    repeats: false,
+                    repeats: true,
                   ),
                 ),
               ),

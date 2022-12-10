@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:typed_data';
-import 'dart:ui';
+
+import 'package:flutter/material.dart';
 
 class ClippedPathCanvasProxy implements Canvas {
   final double pathLengthLimit;
@@ -17,7 +18,19 @@ class ClippedPathCanvasProxy implements Canvas {
           min(pathLengthLimit - drawnPathLength, contourMetrics.length);
       // Pass-through draw.
       if (lengthToDraw > 0) {
-        canvas.drawPath(contourMetrics.extractPath(0, lengthToDraw), paint);
+        final pathToDraw = contourMetrics.extractPath(0, lengthToDraw);
+        canvas.drawPath(pathToDraw, paint);
+
+        final isFinalStroke = lengthToDraw < contourMetrics.length;
+        if (isFinalStroke) {
+          // Render the pen's tip.
+          final tip = contourMetrics.extractPath(lengthToDraw, lengthToDraw,
+              startWithMoveTo: true);
+          tip.addOval(
+              Rect.fromCircle(center: tip.getBounds().center, radius: 10));
+          final tipPaint = Paint()..color = Colors.red;
+          canvas.drawPath(tip, tipPaint);
+        }
       }
       drawnPathLength += lengthToDraw;
     });
