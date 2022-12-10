@@ -11,7 +11,8 @@ Widget for drawing animation of SVG. For now, it only renders paths. Feel free t
 - load SVG from any source (string, network...). See built-in [SVG Providers](https://pub.dev/documentation/svg_drawing_animation/latest/svg_drawing_animation/SvgProviders-class.html#static-methods).
 - supports [Duration](https://api.flutter.dev/flutter/dart-core/Duration-class.html).
 - supports [Curves](https://api.flutter.dev/flutter/animation/Curve-class.html).
-- customizable loading state.
+- customizable loading and error state.
+- customizable "pen" rendering.
 
 See [SvgDrawingAnimation](https://pub.dev/documentation/svg_drawing_animation/latest/svg_drawing_animation/SvgDrawingAnimation-class.html) for more.
 
@@ -27,11 +28,12 @@ See [SvgDrawingAnimation](https://pub.dev/documentation/svg_drawing_animation/la
 | Load SVG from String | ✅ | ❌ |
 | Load SVG from Network | ✅ | ❌ |
 | Load SVG from Assets | ✅ | ✅ |
-| Load SVG from other sources (File...) | ✅ | ❌ |
+| Load SVG from File | ✅ | ❌ |
 | Recursive style (eg a group's style applies to its children) | ✅ | ❌ |
 | Duration | ✅ | ✅ |
 | Curve | ✅ | ✅ |
 | repeats | ✅ | ✅ |
+| Draw the Pen | ✅ | ❌ |
 | Line orders (in order, all at once, top to bottom...) | ❌ | ✅ |
 
 ## Usage

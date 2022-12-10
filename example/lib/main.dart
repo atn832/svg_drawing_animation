@@ -22,29 +22,32 @@ class MyApp extends StatelessWidget {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Card(
                 child: SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: SvgDrawingAnimation(
-                    SvgProviders.string(kanjiSvg),
-                    duration: const Duration(seconds: 2),
-                    repeats: true,
-                  ),
-                ),
-              ),
-              Card(
-                child: SizedBox(
                   width: 100,
                   height: 100,
                   child: SvgDrawingAnimation(
                     SvgProviders.string(kanjiSvg),
-                    duration: const Duration(seconds: 2),
-                    curve: Curves.decelerate,
+                    duration: const Duration(seconds: 4),
                     repeats: true,
                   ),
                 ),
               ),
               const SizedBox(height: 16),
-              const Text('SVG from URL'),
+              const Text('Red drawing marker'),
+              Card(
+                child: SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: SvgDrawingAnimation(SvgProviders.string(kanjiSvg),
+                      duration: const Duration(seconds: 4),
+                      repeats: true,
+                      penRenderer: CirclePenRenderer(
+                          radius: 15,
+                          paint: Paint()
+                            ..color = Colors.redAccent.withAlpha(128))),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text('Load SVG from URL'),
               Card(
                 child: SizedBox(
                   width: 300,

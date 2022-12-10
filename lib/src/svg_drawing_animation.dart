@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'builders.dart';
 import 'measure_path_length_canvas.dart';
 import 'clipped_path_painter.dart';
+import 'pen_renderer/pen_renderer.dart';
 import 'svg_provider.dart';
 
 /// A widget that displays a drawing animation of SVG.
@@ -16,7 +17,8 @@ class SvgDrawingAnimation extends StatefulWidget {
       this.curve = Curves.linear,
       this.repeats = false,
       this.loadingWidgetBuilder = defaultLoadingWidgetBuilder,
-      this.errorWidgetBuilder = defaultErrorWidgetBuilder});
+      this.errorWidgetBuilder = defaultErrorWidgetBuilder,
+      this.penRenderer});
 
   /// The SVG to display.
   final SvgProvider drawableRoot;
@@ -37,6 +39,9 @@ class SvgDrawingAnimation extends StatefulWidget {
   /// A builder that specifies the widget to display to the user if an error
   /// has occurred.
   final ErrorWidgetBuilder errorWidgetBuilder;
+
+  /// Optionally renders the Pen during the drawing animation.
+  final PenRenderer? penRenderer;
 
   /// Computes the total length of paths in some SVG.
   static double getPathLengthSum(Drawable drawable) {
@@ -101,7 +106,8 @@ class _SvgDrawingAnimationState extends State<SvgDrawingAnimation>
                         child: CustomPaint(
                             painter: ClippedPathPainter(snapshot.data!,
                                 pathLengthLimit:
-                                    animation.value * totalPathLength))));
+                                    animation.value * totalPathLength,
+                                penRenderer: widget.penRenderer))));
               });
         });
   }

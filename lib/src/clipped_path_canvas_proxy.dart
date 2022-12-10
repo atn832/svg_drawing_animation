@@ -3,13 +3,18 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
+import 'pen_renderer/pen_renderer.dart';
+
 class ClippedPathCanvasProxy implements Canvas {
   final double pathLengthLimit;
   final Canvas canvas;
 
   double drawnPathLength = 0;
 
-  ClippedPathCanvasProxy(this.canvas, {required this.pathLengthLimit});
+  final PenRenderer? penRenderer;
+
+  ClippedPathCanvasProxy(this.canvas,
+      {required this.pathLengthLimit, this.penRenderer});
 
   @override
   void drawPath(Path path, Paint paint) {
@@ -31,16 +36,15 @@ class ClippedPathCanvasProxy implements Canvas {
       // If we drew less than the full contour length, it means we've reached
       // [pathLengthLimit] and the end of the current contour is where the "pen"
       // is.
+      if (penRenderer == null) continue;
+
       final isFinalStroke = lengthToDraw < contourMetrics.length;
       if (isFinalStroke) {
         final pathEndPoint = contourMetrics
             .extractPath(lengthToDraw, lengthToDraw, startWithMoveTo: true);
-        final tipPosition = pathEndPoint.getBounds().center;
-        pathEndPoint.moveTo(tipPosition.dx, tipPosition.dy);
-        pathEndPoint.addOval(Rect.fromCircle(center: tipPosition, radius: 10));
-        final tipPaint = Paint()..color = Colors.red;
+        final penPosition = pathEndPoint.getBounds().center;
         // Render the pen's tip.
-        canvas.drawPath(pathEndPoint, tipPaint);
+        penRenderer!.draw(canvas, penPosition, paint);
       }
     }
   }
