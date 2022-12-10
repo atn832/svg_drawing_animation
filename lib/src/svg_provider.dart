@@ -23,7 +23,8 @@ class SvgProviders {
 
   /// Obtains SVG from a [File].
   static SvgProvider file(File file) async {
-    return string(await file.readAsString());
+    // For some reason, unit tests fail if I use `await file.readAsString()`.
+    return string(file.readAsStringSync());
   }
 
   /// Obtains SVG from an [AssetBundle] using a key.

@@ -1,17 +1,12 @@
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ErrorWidgetBuilder;
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'builders.dart';
 import 'measure_path_length_canvas.dart';
 import 'clipped_path_painter.dart';
 import 'svg_provider.dart';
-
-typedef AnimatedSvgLoadingBuilder = Widget Function(BuildContext context);
-
-/// A builder that renders a [CircularProgressIndicator].
-Widget defaultLoadingBuilder(context) =>
-    const Center(child: CircularProgressIndicator());
 
 /// A widget that displays a drawing animation of SVG.
 class SvgDrawingAnimation extends StatefulWidget {
@@ -20,7 +15,8 @@ class SvgDrawingAnimation extends StatefulWidget {
       required this.duration,
       this.curve = Curves.linear,
       this.repeats = false,
-      this.loadingBuilder = defaultLoadingBuilder});
+      this.loadingWidgetBuilder = defaultLoadingWidgetBuilder,
+      this.errorWidgetBuilder = defaultErrorWidgetBuilder});
 
   /// The SVG to display.
   final SvgProvider drawableRoot;
@@ -36,7 +32,11 @@ class SvgDrawingAnimation extends StatefulWidget {
 
   /// A builder that specifies the widget to display to the user while the SVG
   /// is still loading.
-  final AnimatedSvgLoadingBuilder loadingBuilder;
+  final LoadingWidgetBuilder loadingWidgetBuilder;
+
+  /// A builder that specifies the widget to display to the user if an error
+  /// has occurred.
+  final ErrorWidgetBuilder errorWidgetBuilder;
 
   /// Computes the total length of paths in some SVG.
   static double getPathLengthSum(Drawable drawable) {
@@ -80,8 +80,12 @@ class _SvgDrawingAnimationState extends State<SvgDrawingAnimation>
     return FutureBuilder(
         future: widget.drawableRoot,
         builder: (context, snapshot) {
-          if (snapshot.data == null) {
-            return widget.loadingBuilder(context);
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return widget.loadingWidgetBuilder(context);
+          }
+          if (snapshot.hasError) {
+            return widget.errorWidgetBuilder(
+                context, snapshot.error!, snapshot.stackTrace);
           }
           final drawable = snapshot.data!;
           if (!isTotalPathLengthSet) {

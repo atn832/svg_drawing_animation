@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/parser.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:svg_drawing_animation/svg_drawing_animation.dart';
@@ -26,11 +28,42 @@ void main() {
         lessThan(1));
   });
 
-  testWidgets('rendering', (widgetTester) async {
-    await renderAndCheckGoldens(
-        widgetTester, 'kanji', SvgProviders.string(kanjiSvg));
-    await renderAndCheckGoldens(widgetTester, 'elephant',
-        SvgProviders.file(File('test/African_Elephant.svg')));
+  group('rendering', () {
+    testWidgets('from string', (widgetTester) async {
+      await renderAndCheckGoldens(
+          widgetTester, 'kanji', SvgProviders.string(kanjiSvg));
+    });
+    testWidgets('from file', (widgetTester) async {
+      await renderAndCheckGoldens(widgetTester, 'elephant',
+          SvgProviders.file(File('test/African_Elephant.svg')));
+    });
+    testWidgets('error', (widgetTester) async {
+      final Completer<DrawableRoot> completer = Completer();
+      await widgetTester.pumpWidget(MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: Scaffold(
+            appBar: AppBar(title: const Text('Example')),
+            body: Center(
+              child: Card(
+                child: SizedBox(
+                  width: 300,
+                  height: 300,
+                  child: SvgDrawingAnimation(
+                    completer.future,
+                    duration: const Duration(milliseconds: 500),
+                    repeats: false,
+                  ),
+                ),
+              ),
+            )),
+      ));
+      completer.completeError('Bad SVG');
+      await widgetTester.pumpAndSettle();
+      expect(find.textContaining('Bad SVG'), findsOneWidget);
+    });
   });
 }
 
@@ -58,8 +91,8 @@ Future<void> renderAndCheckGoldens(WidgetTester widgetTester,
         )),
   ));
 
-  // No matter the duration, the elephant is incomplete. I don't know why.
   await widgetTester.pumpAndSettle(const Duration(seconds: 20));
+
   await expectLater(find.byType(MaterialApp),
       matchesGoldenFile('goldens/render_$description.png'));
 }
