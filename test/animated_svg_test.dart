@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:svg_drawing_animation/src/clipped_path_painter.dart';
 import 'package:svg_drawing_animation/svg_drawing_animation.dart';
 
 import 'animated_svg_test.mocks.dart';
@@ -20,6 +21,8 @@ const lineSvg = '''<svg height="10" width="10">
   </g>
 </svg>''';
 
+const kanjiLength = 455;
+
 @GenerateMocks([http.Client])
 void main() {
   test('length', () async {
@@ -28,9 +31,27 @@ void main() {
         SvgDrawingAnimation.getPathLengthSum(await parser.parse(lineSvg)), 2);
     expect(
         (SvgDrawingAnimation.getPathLengthSum(await parser.parse(kanjiSvg)) -
-                455)
+                kanjiLength)
             .abs(),
         lessThan(1));
+  });
+
+  testWidgets('clipped path painter', (widgetTester) async {
+    await renderClippedPathPainterAndCheckGoldens(
+        widgetTester,
+        'kanji_10_percent',
+        await SvgProviders.string(kanjiSvg),
+        .1 * kanjiLength);
+    await renderClippedPathPainterAndCheckGoldens(
+        widgetTester,
+        'kanji_50_percent',
+        await SvgProviders.string(kanjiSvg),
+        .5 * kanjiLength);
+    await renderClippedPathPainterAndCheckGoldens(
+        widgetTester,
+        'kanji_100_percent',
+        await SvgProviders.string(kanjiSvg),
+        1.0 * kanjiLength);
   });
 
   test('network error shows the network error instead of a XML parsing error',
@@ -120,4 +141,30 @@ Future<void> renderAndCheckGoldens(WidgetTester widgetTester,
 
   await expectLater(find.byType(MaterialApp),
       matchesGoldenFile('goldens/render_$description.png'));
+}
+
+Future<void> renderClippedPathPainterAndCheckGoldens(WidgetTester widgetTester,
+    String description, DrawableRoot svg, double pathLengthLimit) async {
+  await widgetTester.pumpWidget(MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Example')),
+        body: SizedBox.expand(
+          child: FittedBox(
+              child: SizedBox.fromSize(
+                  size: svg.viewport.viewBox,
+                  child: CustomPaint(
+                    painter: ClippedPathPainter(svg,
+                        pathLengthLimit: pathLengthLimit),
+                  ))),
+        ),
+      )));
+
+  await widgetTester.pumpAndSettle();
+
+  await expectLater(find.byType(MaterialApp),
+      matchesGoldenFile('goldens/clipped_path_$description.png'));
 }
