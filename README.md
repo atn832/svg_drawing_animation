@@ -106,6 +106,9 @@ SvgDrawingAnimation(
 
 ### Custom error handling
 
+By default svg_drawing_animation shows an error message when an error occurs, but
+you can customize what to show to the user instead.
+
 ```dart
 SvgDrawingAnimation(
     SvgProviders.network(
