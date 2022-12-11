@@ -1,3 +1,7 @@
+## 0.9.3
+
+- Properly display the network error message when `SvgProviders.network` fails.
+
 ## 0.9.2
 
 - Implemented PenRenderer.

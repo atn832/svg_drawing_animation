@@ -146,3 +146,9 @@ typedef SvgProvider = Future<DrawableRoot>;
 ### Loading and Error states
 
 We allow custom rendering of loading and error states similar to Image's [ImageLoadingBuilder](https://api.flutter.dev/flutter/widgets/ImageLoadingBuilder.html) and [ImageErrorWidgetBuilder](https://api.flutter.dev/flutter/widgets/ImageErrorWidgetBuilder.html).
+
+## Developing
+
+### Re-generating http.Client mocks
+
+Run `flutter pub run build_runner build`. See [Flutter Cookbook on Mockito](https://docs.flutter.dev/cookbook/testing/unit/mocking#3-create-a-test-file-with-a-mock-httpclient).

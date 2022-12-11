@@ -5,8 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/parser.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 import 'package:svg_drawing_animation/svg_drawing_animation.dart';
 
+import 'animated_svg_test.mocks.dart';
 import 'kanji_svg.dart';
 
 // A line of length 1, transformed by a scale(2, 1). So the render length is 2.
@@ -16,6 +20,7 @@ const lineSvg = '''<svg height="10" width="10">
   </g>
 </svg>''';
 
+@GenerateMocks([http.Client])
 void main() {
   test('length', () async {
     final parser = SvgParser();
@@ -26,6 +31,26 @@ void main() {
                 455)
             .abs(),
         lessThan(1));
+  });
+
+  test('network error shows the network error instead of a XML parsing error',
+      () async {
+    final client = MockClient();
+
+    when(client.get(Uri.parse('https://notfound/img.svg'))).thenAnswer(
+        (_) async => http.Response(
+            'https://notfound/img.svg was not found', 404,
+            reasonPhrase: 'Not found'));
+    expect(() => SvgProviders.network('https://notfound/img.svg', client),
+        throwsA('Not found: https://notfound/img.svg was not found'));
+  });
+
+  test('asset error', () async {
+    // Check that it throws a FlutterError. The message states it cant't find
+    // the asset but I can't figure out how to match partial content of the
+    // FlutterError message.
+    expect(() => SvgProviders.asset('unknown-asset'),
+        throwsA(isA<FlutterError>()));
   });
 
   group('rendering', () {

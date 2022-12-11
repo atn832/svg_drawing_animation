@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/parser.dart';
 
@@ -16,14 +16,20 @@ class SvgProviders {
   }
 
   /// Obtains SVG from a URL.
-  static SvgProvider network(String src) async {
-    final response = await http.get(Uri.parse(src));
+  static SvgProvider network(String src, [Client? client]) async {
+    final response = await (client ?? Client()).get(Uri.parse(src));
+    if (response.statusCode != 200) {
+      return Future.error([
+        if (response.reasonPhrase != null) response.reasonPhrase,
+        response.body
+      ].join(': '));
+    }
     return string(response.body);
   }
 
   /// Obtains SVG from a [File].
   static SvgProvider file(File file) async {
-    // For some reason, unit tests fail if I use `await file.readAsString()`.
+    // For some reason, unit tests freeze if I use `await file.readAsString()`.
     return string(file.readAsStringSync());
   }
 
