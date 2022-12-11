@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 class MeasurePathLengthCanvas extends Canvas {
-  double drawnPathLength = 0;
   double pathLengthSum = 0;
 
   MeasurePathLengthCanvas(super.recorder);
