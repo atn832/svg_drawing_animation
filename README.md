@@ -10,7 +10,7 @@ Widget for drawing animation of SVG. For now, it only renders paths. Feel free t
 
 - load SVG from any source (string, network...). See built-in [SVG Provider](https://pub.dev/documentation/svg_drawing_animation/latest/svg_drawing_animation/SvgProvider-class.html#static-methods)s.
 - supports [Duration](https://api.flutter.dev/flutter/dart-core/Duration-class.html).
-- supports [Curves](https://api.flutter.dev/flutter/animation/Curve-class.html).
+- supports [Curve](https://api.flutter.dev/flutter/animation/Curve-class.html)s.
 - customizable loading and error state.
 - customizable "pen" rendering.
 
