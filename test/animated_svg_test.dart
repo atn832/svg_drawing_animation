@@ -40,17 +40,17 @@ void main() {
     await renderClippedPathPainterAndCheckGoldens(
         widgetTester,
         'kanji_10_percent',
-        await SvgProviders.string(kanjiSvg),
+        await SvgProvider.string(kanjiSvg).resolve(),
         .1 * kanjiLength);
     await renderClippedPathPainterAndCheckGoldens(
         widgetTester,
         'kanji_50_percent',
-        await SvgProviders.string(kanjiSvg),
+        await SvgProvider.string(kanjiSvg).resolve(),
         .5 * kanjiLength);
     await renderClippedPathPainterAndCheckGoldens(
         widgetTester,
         'kanji_100_percent',
-        await SvgProviders.string(kanjiSvg),
+        await SvgProvider.string(kanjiSvg).resolve(),
         1.0 * kanjiLength);
   });
 
@@ -62,7 +62,8 @@ void main() {
         (_) async => http.Response(
             'https://notfound/img.svg was not found', 404,
             reasonPhrase: 'Not found'));
-    expect(() => SvgProviders.network('https://notfound/img.svg', client),
+    expect(
+        () => SvgProvider.network('https://notfound/img.svg', client).resolve(),
         throwsA('Not found: https://notfound/img.svg was not found'));
   });
 
@@ -70,21 +71,22 @@ void main() {
     // Check that it throws a FlutterError. The message states it cant't find
     // the asset but I can't figure out how to match partial content of the
     // FlutterError message.
-    expect(() => SvgProviders.asset('unknown-asset'),
+    expect(() => SvgProvider.asset('unknown-asset').resolve(),
         throwsA(isA<FlutterError>()));
   });
 
   group('rendering', () {
     testWidgets('from string', (widgetTester) async {
       await renderAndCheckGoldens(
-          widgetTester, 'kanji', SvgProviders.string(kanjiSvg));
+          widgetTester, 'kanji', SvgProvider.string(kanjiSvg));
     });
     testWidgets('from file', (widgetTester) async {
       await renderAndCheckGoldens(widgetTester, 'elephant',
-          SvgProviders.file(File('test/African_Elephant.svg')));
+          SvgProvider.file(File('test/African_Elephant.svg')));
     });
     testWidgets('error', (widgetTester) async {
       final Completer<DrawableRoot> completer = Completer();
+      final m = SvgProvider.future(completer.future);
       await widgetTester.pumpWidget(MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -98,7 +100,7 @@ void main() {
                   width: 300,
                   height: 300,
                   child: SvgDrawingAnimation(
-                    completer.future,
+                    m,
                     duration: const Duration(milliseconds: 500),
                     repeats: false,
                   ),

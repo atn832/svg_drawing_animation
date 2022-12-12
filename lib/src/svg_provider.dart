@@ -5,36 +5,56 @@ import 'package:http/http.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/parser.dart';
 
-/// Provides SVG. See [SvgProviders] for predefined providers.
-typedef SvgProvider = Future<DrawableRoot>;
+/// Provides SVG. Several constructors are provided for the various ways that
+/// SVG can be obtained:
+/// * [SvgProvider.string], for obtaining SVG from a [String].
+/// * [SvgProvider.network], for obtaining SVG from a URL.
+/// * [SvgProvider.file], for obtaining SVG from a [File].
+/// * [SvgProvider.asset], for obtaining SVG from an [AssetBundle] using a key.
+/// * [SvgProvider.future], for obtaining SVG from a [Future].
+class SvgProvider {
+  SvgProvider._(this.svg);
 
-/// Provides utility functions to obtain SVG.
-class SvgProviders {
-  /// Obtains SVG from a String.
-  static SvgProvider string(String svgString) {
-    return SvgParser().parse(svgString);
+  final Future<DrawableRoot> svg;
+
+  Future<DrawableRoot> resolve() => svg;
+
+  /// Obtains SVG from a [Future].
+  factory SvgProvider.future(Future<DrawableRoot> svg) {
+    return SvgProvider._(svg);
+  }
+
+  /// Obtains SVG from a [String].
+  factory SvgProvider.string(String svgString) {
+    return SvgProvider._(SvgParser().parse(svgString));
   }
 
   /// Obtains SVG from a URL.
-  static SvgProvider network(String src, [Client? client]) async {
-    final response = await (client ?? Client()).get(Uri.parse(src));
-    if (response.statusCode != 200) {
-      return Future.error([
-        if (response.reasonPhrase != null) response.reasonPhrase,
-        response.body
-      ].join(': '));
-    }
-    return string(response.body);
+  factory SvgProvider.network(String src, [Client? client]) {
+    return SvgProvider._(Future(() async {
+      final response = await (client ?? Client()).get(Uri.parse(src));
+      if (response.statusCode != 200) {
+        return Future.error([
+          if (response.reasonPhrase != null) response.reasonPhrase,
+          response.body
+        ].join(': '));
+      }
+      return SvgParser().parse(response.body);
+    }));
   }
 
   /// Obtains SVG from a [File].
-  static SvgProvider file(File file) async {
-    // For some reason, unit tests freeze if I use `await file.readAsString()`.
-    return string(file.readAsStringSync());
+  factory SvgProvider.file(File file) {
+    return SvgProvider._(Future(() async {
+      // For some reason, unit tests freeze if I use `await file.readAsString()`.
+      final str = file.readAsStringSync();
+      return SvgParser().parse(str);
+    }));
   }
 
   /// Obtains SVG from an [AssetBundle] using a key.
-  static SvgProvider asset(String name) async {
-    return string(await rootBundle.loadString(name));
+  factory SvgProvider.asset(String name) {
+    return SvgProvider._(Future(
+        () async => SvgParser().parse(await rootBundle.loadString(name))));
   }
 }

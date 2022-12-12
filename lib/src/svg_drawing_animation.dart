@@ -11,7 +11,7 @@ import 'svg_provider.dart';
 
 /// A widget that displays a drawing animation of SVG.
 class SvgDrawingAnimation extends StatefulWidget {
-  const SvgDrawingAnimation(this.drawableRoot,
+  const SvgDrawingAnimation(this.svgProvider,
       {super.key,
       required this.duration,
       this.curve = Curves.linear,
@@ -20,8 +20,8 @@ class SvgDrawingAnimation extends StatefulWidget {
       this.errorWidgetBuilder = defaultErrorWidgetBuilder,
       this.penRenderer});
 
-  /// The SVG to display.
-  final SvgProvider drawableRoot;
+  /// Provides the SVG to display.
+  final SvgProvider svgProvider;
 
   /// Whether the animation plays once or repeats indefinitely.
   final bool repeats;
@@ -43,7 +43,7 @@ class SvgDrawingAnimation extends StatefulWidget {
   /// Optionally renders the Pen during the drawing animation.
   final PenRenderer? penRenderer;
 
-  /// Computes the total length of paths in some SVG.
+  /// Computes the total length of paths in SVG.
   static double getPathLengthSum(Drawable drawable) {
     final c = MeasurePathLengthCanvas(PictureRecorder());
     // TODO: pass proper values to bounds.
@@ -83,7 +83,7 @@ class _SvgDrawingAnimationState extends State<SvgDrawingAnimation>
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: widget.drawableRoot,
+        future: widget.svgProvider.resolve(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return widget.loadingWidgetBuilder(context);

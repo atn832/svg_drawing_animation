@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
                   width: 100,
                   height: 100,
                   child: SvgDrawingAnimation(
-                    SvgProviders.string(kanjiSvg),
+                    SvgProvider.string(kanjiSvg),
                     duration: const Duration(seconds: 4),
                     repeats: true,
                   ),
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
                 child: SizedBox(
                   width: 100,
                   height: 100,
-                  child: SvgDrawingAnimation(SvgProviders.string(kanjiSvg),
+                  child: SvgDrawingAnimation(SvgProvider.string(kanjiSvg),
                       duration: const Duration(seconds: 4),
                       repeats: true,
                       penRenderer: CirclePenRenderer(
@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
                   width: 300,
                   height: 300,
                   child: SvgDrawingAnimation(
-                    SvgProviders.network(
+                    SvgProvider.network(
                         'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
                     duration: const Duration(seconds: 10),
                     // repeats: true,
