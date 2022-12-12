@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
             appBar: AppBar(title: const Text('Example')),
             body: Center(
                 child: SvgDrawingAnimation(
-              SvgProviders.network(
+              SvgProvider.network(
                   'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
               duration: const Duration(seconds: 10),
             ))));
@@ -77,7 +77,7 @@ MaterialApp(
               width: 300,
               height: 300,
               child: SvgDrawingAnimation(
-        SvgProviders.network(
+        SvgProvider.network(
             'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
         duration: const Duration(seconds: 10),
       )))));
@@ -87,7 +87,7 @@ MaterialApp(
 
 ```dart
 SvgDrawingAnimation(
-    SvgProviders.network(
+    SvgProvider.network(
         'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
     duration: const Duration(seconds: 10),
     curve: Curves.decelerate,
@@ -98,7 +98,7 @@ SvgDrawingAnimation(
 
 ```dart
 SvgDrawingAnimation(
-    SvgProviders.network(
+    SvgProvider.network(
         'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
     duration: const Duration(seconds: 4),
     loadingWidgetBuilder: (context) => Center(child: LinearProgressIndicator()))
@@ -111,7 +111,7 @@ you can customize what to show to the user instead.
 
 ```dart
 SvgDrawingAnimation(
-    SvgProviders.network(
+    SvgProvider.network(
         'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
     duration: const Duration(seconds: 4),
     errorWidgetBuilder: (context) => Text('Oops! Something went wrong.'))
@@ -121,7 +121,7 @@ SvgDrawingAnimation(
 
 ```dart
 SvgDrawingAnimation(
-    SvgProviders.network(
+    SvgProvider.network(
         'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
     duration: const Duration(seconds: 4),
     penRenderer: CirclePenRenderer(radius: 15))
@@ -137,11 +137,7 @@ See <https://docs.flutter.dev/development/ui/animations> for comprehensive infor
 
 ### SvgProvider
 
-Flutter's [Image widget](https://api.flutter.dev/flutter/widgets/Image-class.html) uses an [ImageProvider](https://api.flutter.dev/flutter/painting/ImageProvider-class.html), while flutter_svg's [SvgPicture](https://pub.dev/documentation/flutter_svg/latest/svg/SvgPicture-class.html) uses a similar [PictureProvider](https://pub.dev/documentation/flutter_svg/latest/flutter_svg/PictureProvider-class.html) pattern. That kind of architecture is quite advanced but produces too much code. So we've opted for a typedef that is easy to implement:
-
-```dart
-typedef SvgProvider = Future<DrawableRoot>;
-```
+Flutter's [Image widget](https://api.flutter.dev/flutter/widgets/Image-class.html) uses an [ImageProvider](https://api.flutter.dev/flutter/painting/ImageProvider-class.html), while flutter_svg's [SvgPicture](https://pub.dev/documentation/flutter_svg/latest/svg/SvgPicture-class.html) uses a similar [PictureProvider](https://pub.dev/documentation/flutter_svg/latest/flutter_svg/PictureProvider-class.html) pattern. We follow that architecture by introducing an [SvgProvider](https://pub.dev/documentation/svg_drawing_animation/latest/svg_drawing_animation/SvgProvider-class.html) with Futures instead of Streams for simplicity.
 
 ### Loading and Error states
 

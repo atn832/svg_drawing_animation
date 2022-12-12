@@ -1,4 +1,9 @@
-## 0.9.3
+## 0.10.0
+
+Breaking change: switched from static methods like `SvgProviders.network` to
+factory methods like `SvgProvider.network`.
+
+## 0.9.4
 
 - Properly display the network error message when `SvgProviders.network` fails.
 
