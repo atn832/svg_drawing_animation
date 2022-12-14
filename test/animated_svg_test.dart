@@ -21,7 +21,7 @@ const lineSvg = '''<svg height="10" width="10">
   </g>
 </svg>''';
 
-const kanjiLength = 455;
+const kanjiLength = 455.5347023010254;
 
 @GenerateMocks([http.Client])
 void main() {
@@ -30,7 +30,7 @@ void main() {
     expect(
         SvgDrawingAnimation.getPathLengthSum(await parser.parse(lineSvg)), 2);
     expect(SvgDrawingAnimation.getPathLengthSum(await parser.parse(kanjiSvg)),
-        455.5347023010254);
+        kanjiLength);
     expect(
         SvgDrawingAnimation.getPathLengthSum(
             await SvgProvider.file(File('test/African_Elephant.svg')).svg),
