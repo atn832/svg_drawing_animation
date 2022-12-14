@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart' hide ErrorWidgetBuilder;
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -45,7 +43,7 @@ class SvgDrawingAnimation extends StatefulWidget {
 
   /// Computes the total length of paths in SVG.
   static double getPathLengthSum(Drawable drawable) {
-    final c = MeasurePathLengthCanvas(PictureRecorder());
+    final c = MeasurePathLengthCanvas();
     // TODO: pass proper values to bounds.
     drawable.draw(c, const Rect.fromLTRB(0, 0, 1, 1));
     return c.pathLengthSum;

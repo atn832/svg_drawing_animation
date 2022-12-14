@@ -29,11 +29,12 @@ void main() {
     final parser = SvgParser();
     expect(
         SvgDrawingAnimation.getPathLengthSum(await parser.parse(lineSvg)), 2);
+    expect(SvgDrawingAnimation.getPathLengthSum(await parser.parse(kanjiSvg)),
+        455.5347023010254);
     expect(
-        (SvgDrawingAnimation.getPathLengthSum(await parser.parse(kanjiSvg)) -
-                kanjiLength)
-            .abs(),
-        lessThan(1));
+        SvgDrawingAnimation.getPathLengthSum(
+            await SvgProvider.file(File('test/African_Elephant.svg')).svg),
+        3459.3614106178284);
   });
 
   testWidgets('clipped path painter', (widgetTester) async {
