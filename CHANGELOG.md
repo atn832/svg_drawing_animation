@@ -1,3 +1,7 @@
+## 0.10.1
+
+Fixed compilation error on Web.
+
 ## 0.10.0+1
 
 Fixed documentation.
