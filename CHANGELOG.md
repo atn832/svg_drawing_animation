@@ -1,3 +1,7 @@
+## 0.10.1+1
+
+Relaxed version of vector_math to pass pub.dev tests.
+
 ## 0.10.1
 
 Fixed compilation error on Web.

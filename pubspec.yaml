@@ -1,6 +1,6 @@
 name: svg_drawing_animation
 description: Widget for drawing line animations of SVG. Uses flutter_svg for parsing.
-version: 0.10.1
+version: 0.10.1+1
 repository: https://github.com/atn832/svg_drawing_animation
 homepage: https://www.wafrat.com
 
@@ -13,7 +13,7 @@ dependencies:
     sdk: flutter
   flutter_svg: ^1.1.6
   http: ^0.13.5
-  vector_math: ^2.1.4
+  vector_math: ^2.1.2
 
 dev_dependencies:
   flutter_test:
