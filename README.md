@@ -9,7 +9,7 @@ Widget for drawing line animations of SVG. For now, it only renders paths. Feel 
 ## Features
 
 - load SVG from any source (string, network...). See built-in [SvgProvider]s.
-- supports [Duration].
+- supports [Duration] and speed.
 - supports [Curve]s.
 - customizable loading and error state.
 - customizable "pen" rendering.
@@ -18,7 +18,7 @@ See [SvgDrawingAnimation] for more.
 
 ## Difference with other packages
 
-- [drawing_animation](https://pub.dartlang.org/packages/drawing_animation) served as inspiration for this package. Check out the table below for differences.
+- [drawing_animation](https://pub.dartlang.org/packages/drawing_animation) served as inspiration for this package. It appears not to be maintained any more. Check out the table below for differences.
 - [flutter_svg](https://pub.dev/packages/flutter_svg) provides a Widget to render static SVG. We use flutter_svg to parse SVG.
 - [animated_svg](https://pub.dev/packages/animated_svg) makes smooth transitions between two different SVG.
 
@@ -31,6 +31,7 @@ See [SvgDrawingAnimation] for more.
 | Load SVG from File | ✅ | ❌ |
 | Recursive style (eg a group's style applies to its children) | ✅ | ❌ |
 | Duration, Curve, repeats | ✅ | ✅ |
+| Speed instead of Duration | ✅ | ❌ |
 | Draws the Pen | ✅ | ❌ |
 | Line orders (in order, all at once, top to bottom...) | ❌ | ✅ |
 
@@ -91,6 +92,16 @@ SvgDrawingAnimation(
         'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
     duration: const Duration(seconds: 10),
     curve: Curves.decelerate,
+    repeats: true)
+```
+
+### Speed instead of duration
+
+```dart
+SvgDrawingAnimation(
+    SvgProvider.network(
+        'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
+    speed: 100,
     repeats: true)
 ```
 

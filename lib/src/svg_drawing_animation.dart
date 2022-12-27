@@ -11,12 +11,19 @@ import 'svg_provider.dart';
 class SvgDrawingAnimation extends StatefulWidget {
   const SvgDrawingAnimation(this.svgProvider,
       {super.key,
-      required this.duration,
+      this.duration,
+      this.speed,
       this.curve = Curves.linear,
       this.repeats = false,
       this.loadingWidgetBuilder = defaultLoadingWidgetBuilder,
       this.errorWidgetBuilder = defaultErrorWidgetBuilder,
-      this.penRenderer});
+      this.penRenderer})
+      : assert(!(duration == null && speed == null),
+            'You must set a duration or speed.'),
+        assert(
+            duration != null && speed == null ||
+                speed != null && duration == null,
+            'Only one of duration or speed can be used at a time.');
 
   /// Provides the SVG to display.
   final SvgProvider svgProvider;
@@ -24,8 +31,11 @@ class SvgDrawingAnimation extends StatefulWidget {
   /// Whether the animation plays once or repeats indefinitely.
   final bool repeats;
 
-  /// The duration over which to animate.
-  final Duration duration;
+  /// The duration over which to animate. Use one of [duration] or [speed].
+  final Duration? duration;
+
+  /// The speed at which to animate. Use one of [duration] or [speed].
+  final double? speed;
 
   /// The curve to apply when animating.
   final Curve curve;
@@ -55,22 +65,10 @@ class SvgDrawingAnimation extends StatefulWidget {
 
 class _SvgDrawingAnimationState extends State<SvgDrawingAnimation>
     with SingleTickerProviderStateMixin {
+  bool isTotalPathLengthSet = false;
   late Animation<double> animation;
   late AnimationController controller;
-  bool isTotalPathLengthSet = false;
   late final double totalPathLength;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = AnimationController(duration: widget.duration, vsync: this);
-    animation = CurvedAnimation(parent: controller, curve: widget.curve);
-    if (widget.repeats) {
-      controller.repeat();
-    } else {
-      controller.forward();
-    }
-  }
 
   @override
   void dispose() {
@@ -91,9 +89,21 @@ class _SvgDrawingAnimationState extends State<SvgDrawingAnimation>
                 context, snapshot.error!, snapshot.stackTrace);
           }
           final drawable = snapshot.data!;
+          // Compute total length and set up animation;
           if (!isTotalPathLengthSet) {
             totalPathLength = SvgDrawingAnimation.getPathLengthSum(drawable);
             isTotalPathLengthSet = true;
+
+            final duration = widget.duration ??
+                Duration(milliseconds: 1000 * totalPathLength ~/ widget.speed!);
+            controller = AnimationController(duration: duration, vsync: this);
+            animation =
+                CurvedAnimation(parent: controller, curve: widget.curve);
+            if (widget.repeats) {
+              controller.repeat();
+            } else {
+              controller.forward();
+            }
           }
           return AnimatedBuilder(
               animation: animation,

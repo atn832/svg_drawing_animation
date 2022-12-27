@@ -1,3 +1,7 @@
+## 0.10.2
+
+Support passing a `speed` instead of a `Duration`.
+
 ## 0.10.1+1
 
 Relaxed version of vector_math to pass pub.dev tests.
