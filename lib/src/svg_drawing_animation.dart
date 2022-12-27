@@ -65,14 +65,14 @@ class SvgDrawingAnimation extends StatefulWidget {
 
 class _SvgDrawingAnimationState extends State<SvgDrawingAnimation>
     with SingleTickerProviderStateMixin {
-  bool isTotalPathLengthSet = false;
+  bool isInitialized = false;
   late Animation<double> animation;
   late AnimationController controller;
   late final double totalPathLength;
 
   @override
   void dispose() {
-    controller.dispose();
+    if (isInitialized) controller.dispose();
     super.dispose();
   }
 
@@ -90,9 +90,9 @@ class _SvgDrawingAnimationState extends State<SvgDrawingAnimation>
           }
           final drawable = snapshot.data!;
           // Compute total length and set up animation;
-          if (!isTotalPathLengthSet) {
+          if (!isInitialized) {
             totalPathLength = SvgDrawingAnimation.getPathLengthSum(drawable);
-            isTotalPathLengthSet = true;
+            isInitialized = true;
 
             final duration = widget.duration ??
                 Duration(milliseconds: 1000 * totalPathLength ~/ widget.speed!);
