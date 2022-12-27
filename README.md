@@ -8,13 +8,13 @@ Widget for drawing line animations of SVG. For now, it only renders paths. Feel 
 
 ## Features
 
-- load SVG from any source (string, network...). See built-in [SvgProvider]s.
-- supports [Duration] and speed.
-- supports [Curve]s.
+- load SVG from any source (string, network...). See built-in [SvgProvider](https://pub.dev/documentation/svg_drawing_animation/latest/svg_drawing_animation/SvgProvider-class.html)s.
+- supports [Duration](https://api.dart.dev/stable/2.18.6/dart-core/Duration-class.html) and speed.
+- supports [Curve](https://api.flutter.dev/flutter/animation/Curve-class.html)s.
 - customizable loading and error state.
 - customizable "pen" rendering.
 
-See [SvgDrawingAnimation] for more.
+See [SvgDrawingAnimation](https://pub.dev/documentation/svg_drawing_animation/latest/svg_drawing_animation/SvgDrawingAnimation-class.html) for more.
 
 ## Difference with other packages
 
@@ -142,17 +142,17 @@ SvgDrawingAnimation(
 
 ### Constructor parameters: Duration, Curve, repeats
 
-We've followed the style of [ImplicitlyAnimatedWidget], which take a [Duration], a [Curve] and a `repeats` flag similar to [AnimatedRotation.turns]. This allows for a good amount of customization without having to mess with AnimationControllers and StatefulWidgets.
+We've followed the style of [ImplicitlyAnimatedWidget](https://api.flutter.dev/flutter/widgets/ImplicitlyAnimatedWidget-class.html), which take a [Duration](https://api.dart.dev/stable/2.18.6/dart-core/Duration-class.html), a [Curve](https://api.flutter.dev/flutter/animation/Curve-class.html) and a `repeats` flag similar to [AnimatedRotation.turns](https://api.flutter.dev/flutter/widgets/AnimatedRotation/turns.html). This allows for a good amount of customization without having to mess with AnimationControllers and StatefulWidgets.
 
 See <https://docs.flutter.dev/development/ui/animations> for comprehensive information on animations.
 
 ### SvgProvider
 
-Flutter's [Image] widdget uses an [ImageProvider], while flutter_svg's [SvgPicture] uses a similar [PictureProvider] pattern. We follow that architecture by introducing an [SvgProvider] with Futures instead of Streams for simplicity.
+Flutter's [Image](https://api.dart.dev/stable/2.18.6/dart-ui/Image-class.html) widdget uses an [ImageProvider](https://api.flutter.dev/flutter/painting/ImageProvider-class.html), while flutter_svg's [SvgPicture](https://pub.dev/documentation/flutter_svg/1.1.6/svg/SvgPicture-class.html) uses a similar [PictureProvider](https://pub.dev/documentation/flutter_svg/1.1.6/flutter_svg/PictureProvider-class.html) pattern. We follow that architecture by introducing an [SvgProvider](https://pub.dev/documentation/svg_drawing_animation/latest/svg_drawing_animation/SvgProvider-class.html) with Futures instead of Streams for simplicity.
 
 ### Loading and Error states
 
-We allow custom rendering of loading and error states similar to Image's [ImageLoadingBuilder] and [ImageErrorWidgetBuilder].
+We allow custom rendering of loading and error states similar to Image's [ImageLoadingBuilder](https://api.flutter.dev/flutter/widgets/ImageLoadingBuilder.html) and [ImageErrorWidgetBuilder](https://api.flutter.dev/flutter/widgets/ImageErrorWidgetBuilder.html).
 
 ## Developing
 
