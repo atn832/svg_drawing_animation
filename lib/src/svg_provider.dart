@@ -19,6 +19,9 @@ class SvgProvider {
 
   Future<DrawableRoot> resolve() => svg;
 
+  // Network cache.
+  static final Map<String, SvgProvider> _urlToProvider = {};
+
   /// Obtains SVG from a [Future].
   factory SvgProvider.future(Future<DrawableRoot> svg) {
     return SvgProvider._(svg);
@@ -29,18 +32,21 @@ class SvgProvider {
     return SvgProvider._(SvgParser().parse(svgString));
   }
 
-  /// Obtains SVG from a URL.
+  /// Obtains SVG from a URL. Requests are cached.
   factory SvgProvider.network(String src, [Client? client]) {
-    return SvgProvider._(Future(() async {
-      final response = await (client ?? Client()).get(Uri.parse(src));
-      if (response.statusCode != 200) {
-        return Future.error([
-          if (response.reasonPhrase != null) response.reasonPhrase,
-          response.body
-        ].join(': '));
-      }
-      return SvgParser().parse(response.body);
-    }));
+    _urlToProvider.putIfAbsent(
+        src,
+        () => SvgProvider._(Future(() async {
+              final response = await (client ?? Client()).get(Uri.parse(src));
+              if (response.statusCode != 200) {
+                return Future.error([
+                  if (response.reasonPhrase != null) response.reasonPhrase,
+                  response.body
+                ].join(': '));
+              }
+              return SvgParser().parse(response.body);
+            })));
+    return _urlToProvider[src]!;
   }
 
   /// Obtains SVG from a [File].

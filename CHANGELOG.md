@@ -1,6 +1,7 @@
 ## 0.10.2
 
-Support passing a `speed` instead of a `Duration`.
+- Support passing a `speed` instead of a `Duration`.
+- Network caching to prevent blinking when re-rendering.
 
 ## 0.10.1+1
 

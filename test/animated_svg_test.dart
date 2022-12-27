@@ -76,6 +76,16 @@ void main() {
         throwsA(isA<FlutterError>()));
   });
 
+  test('network caching', () async {
+    final client = MockClient();
+    when(client.get(any)).thenAnswer(
+        (_) async => http.Response('<svg width="1" height="1"></svg>', 200));
+    expect(SvgProvider.network('same url', client),
+        SvgProvider.network('same url', client));
+    expect(SvgProvider.network('unique url', client),
+        isNot(SvgProvider.network('another url', client)));
+  });
+
   group('rendering', () {
     testWidgets('from string', (widgetTester) async {
       await renderAndCheckGoldens(
