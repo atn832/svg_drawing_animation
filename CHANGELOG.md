@@ -1,3 +1,7 @@
+## 0.10.3+1
+
+Fixed documentation.
+
 ## 0.10.3
 
 Network caching to prevent blinking when re-rendering.
