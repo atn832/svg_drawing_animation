@@ -4,14 +4,16 @@ import 'package:svg_drawing_animation/svg_drawing_animation.dart';
 import 'kanji_svg.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp( MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+   MyApp({super.key});
+
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<SvgDrawingAnimationState>key = GlobalKey<SvgDrawingAnimationState>();
     return MaterialApp(
       title: 'Flutter Demo',
       home: Scaffold(
@@ -20,14 +22,20 @@ class MyApp extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Card(
-                child: SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: SvgDrawingAnimation(
-                    SvgProvider.string(kanjiSvg),
-                    duration: const Duration(seconds: 4),
-                    repeats: true,
+              GestureDetector(
+                onTap: (){
+                  key.currentState?.show();
+                },
+                child: Card(
+                  child: SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: SvgDrawingAnimation(
+                      key:key,
+                      SvgProvider.string(kanjiSvg),
+                      duration: const Duration(seconds: 4),
+                      // repeats: true,
+                    ),
                   ),
                 ),
               ),

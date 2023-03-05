@@ -60,10 +60,10 @@ class SvgDrawingAnimation extends StatefulWidget {
   }
 
   @override
-  State<SvgDrawingAnimation> createState() => _SvgDrawingAnimationState();
+  State<SvgDrawingAnimation> createState() => SvgDrawingAnimationState();
 }
 
-class _SvgDrawingAnimationState extends State<SvgDrawingAnimation>
+class SvgDrawingAnimationState extends State<SvgDrawingAnimation>
     with SingleTickerProviderStateMixin {
   bool isInitialized = false;
   late Animation<double> animation;
@@ -74,6 +74,13 @@ class _SvgDrawingAnimationState extends State<SvgDrawingAnimation>
   void dispose() {
     if (isInitialized) controller.dispose();
     super.dispose();
+  }
+
+  void show(){
+    if(!widget.repeats){
+      controller.reset();
+      controller.forward();
+    }
   }
 
   @override
