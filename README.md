@@ -11,6 +11,7 @@ Widget for drawing line animations of SVG. For now, it only renders paths. Feel 
 - load SVG from any source (string, network...). See built-in [SvgProvider](https://pub.dev/documentation/svg_drawing_animation/latest/svg_drawing_animation/SvgProvider-class.html)s.
 - supports [Duration](https://api.dart.dev/stable/2.18.6/dart-core/Duration-class.html) and speed.
 - supports [Curve](https://api.flutter.dev/flutter/animation/Curve-class.html)s.
+- supports [Animation](https://api.flutter.dev/flutter/animation/Animation-class.html)s.
 - customizable loading and error state.
 - customizable "pen" rendering.
 
@@ -103,6 +104,57 @@ SvgDrawingAnimation(
         'https://upload.wikimedia.org/wikipedia/commons/4/4a/African_Elephant_SVG.svg'),
     speed: 100,
     repeats: true)
+```
+
+### Custom animation
+
+You can use your own `AnimationController`.
+
+```dart
+class ReplayableCard extends StatefulWidget {
+  const ReplayableCard({super.key});
+
+  @override
+  State<ReplayableCard> createState() => _ReplayableCardState();
+}
+
+class _ReplayableCardState extends State<ReplayableCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 5));
+    controller.forward();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        controller.reset();
+        controller.forward();
+      },
+      child: Card(
+        child: SizedBox(
+          width: 100,
+          height: 100,
+          child: SvgDrawingAnimation(SvgProvider.string(kanjiSvg),
+              animation: controller),
+        ),
+      ),
+    );
+  }
+}
 ```
 
 ### Custom progress indicator

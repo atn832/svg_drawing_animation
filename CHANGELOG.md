@@ -1,3 +1,7 @@
+## 0.11.0
+
+Added support for custom `Animation`s.
+
 ## 0.10.3+2
 
 Fixed documentation.

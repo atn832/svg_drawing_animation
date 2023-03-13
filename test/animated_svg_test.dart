@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/parser.dart';
@@ -86,6 +87,54 @@ void main() {
         isNot(SvgProvider.network('another url', client)));
   });
 
+  test('parameter checks', () {
+    expect(
+        () => SvgDrawingAnimation(
+              SvgProvider.string(kanjiSvg),
+              duration: const Duration(seconds: 5),
+            ),
+        returnsNormally);
+    expect(
+        () => SvgDrawingAnimation(
+              SvgProvider.string(kanjiSvg),
+              speed: 5,
+            ),
+        returnsNormally);
+
+    // Can't use both duration and speed.
+    expect(
+        () => SvgDrawingAnimation(
+              SvgProvider.string(kanjiSvg),
+              duration: const Duration(seconds: 5),
+              speed: 5,
+            ),
+        throwsAssertionError);
+    // If using animation, we can't use duration nor speed. In theory, curve is
+    // unnecessary as well, but we don't throw an AssertionError to keep simple
+    // defaults.
+    final animation = Animation.fromValueListenable(ValueNotifier(0.0));
+    expect(
+        () => SvgDrawingAnimation(
+              SvgProvider.string(kanjiSvg),
+              animation: animation,
+            ),
+        returnsNormally);
+    expect(
+        () => SvgDrawingAnimation(
+              SvgProvider.string(kanjiSvg),
+              animation: animation,
+              duration: const Duration(seconds: 5),
+            ),
+        throwsAssertionError);
+    expect(
+        () => SvgDrawingAnimation(
+              SvgProvider.string(kanjiSvg),
+              animation: animation,
+              speed: 5,
+            ),
+        throwsAssertionError);
+  });
+
   group('rendering', () {
     testWidgets('from string', (widgetTester) async {
       await renderAndCheckGoldens(
@@ -123,37 +172,57 @@ void main() {
       await widgetTester.pumpAndSettle();
       expect(find.textContaining('Bad SVG'), findsOneWidget);
     });
+    testWidgets('Animation start', (widgetTester) async {
+      final animation = Animation.fromValueListenable(ValueNotifier(0.0));
+      await renderAndCheckGoldensWidget(
+          widgetTester,
+          'animation0',
+          SvgDrawingAnimation(
+            SvgProvider.string(kanjiSvg),
+            animation: animation,
+          ));
+    });
+    testWidgets('Animation end', (widgetTester) async {
+      final animation = Animation.fromValueListenable(ValueNotifier(1.0));
+      await renderAndCheckGoldensWidget(
+          widgetTester,
+          'animation1',
+          SvgDrawingAnimation(
+            SvgProvider.string(kanjiSvg),
+            animation: animation,
+          ));
+    });
   });
 }
 
-Future<void> renderAndCheckGoldens(WidgetTester widgetTester,
-    String description, SvgProvider svgProvider) async {
+Future<void> renderAndCheckGoldensWidget(
+    WidgetTester widgetTester, String description, Widget widget) async {
   await widgetTester.pumpWidget(MaterialApp(
-    title: 'Flutter Demo',
-    theme: ThemeData(
-      primarySwatch: Colors.blue,
-    ),
-    home: Scaffold(
-        appBar: AppBar(title: const Text('Example')),
-        body: Center(
-          child: Card(
-            child: SizedBox(
-              width: 300,
-              height: 300,
-              child: SvgDrawingAnimation(
-                svgProvider,
-                duration: const Duration(milliseconds: 500),
-                repeats: false,
-              ),
-            ),
-          ),
-        )),
-  ));
-
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Scaffold(
+          appBar: AppBar(title: const Text('Example')),
+          body: Center(
+              child: Card(
+                  child: SizedBox(width: 300, height: 300, child: widget))))));
   await widgetTester.pumpAndSettle(const Duration(seconds: 20));
 
   await expectLater(find.byType(MaterialApp),
       matchesGoldenFile('goldens/render_$description.png'));
+}
+
+Future<void> renderAndCheckGoldens(WidgetTester widgetTester,
+    String description, SvgProvider svgProvider) async {
+  await renderAndCheckGoldensWidget(
+      widgetTester,
+      description,
+      SvgDrawingAnimation(
+        svgProvider,
+        duration: const Duration(milliseconds: 500),
+        repeats: false,
+      ));
 }
 
 Future<void> renderClippedPathPainterAndCheckGoldens(WidgetTester widgetTester,
@@ -180,4 +249,20 @@ Future<void> renderClippedPathPainterAndCheckGoldens(WidgetTester widgetTester,
 
   await expectLater(find.byType(MaterialApp),
       matchesGoldenFile('goldens/clipped_path_$description.png'));
+}
+
+class FixedAnimation implements ValueListenable<double> {
+  @override
+  void addListener(VoidCallback listener) {
+    // TODO: implement addListener
+  }
+
+  @override
+  void removeListener(VoidCallback listener) {
+    // TODO: implement removeListener
+  }
+
+  @override
+  // TODO: implement value
+  double get value => throw UnimplementedError();
 }
