@@ -9,7 +9,7 @@ Widget for drawing line animations of SVG. For now, it only renders paths. Feel 
 ## Features
 
 - load SVG from any source (string, network...). See built-in [SvgProvider](https://pub.dev/documentation/svg_drawing_animation/latest/svg_drawing_animation/SvgProvider-class.html)s.
-- supports [Duration][] and speed.
+- supports [Duration](https://api.dart.dev/stable/2.18.6/dart-core/Duration-class.html) and speed.
 - supports [Curve](https://api.flutter.dev/flutter/animation/Curve-class.html)s.
 - customizable loading and error state.
 - customizable "pen" rendering.
@@ -18,7 +18,7 @@ See [SvgDrawingAnimation](https://pub.dev/documentation/svg_drawing_animation/la
 
 ## Difference with other packages
 
-- [drawing_animation][drawing_animation pub] served as inspiration for this package. It appears not to be maintained any more. Check out the table below for differences.
+- [drawing_animation](https://pub.dartlang.org/packages/drawing_animation) served as inspiration for this package. It appears not to be maintained any more. Check out the table below for differences.
 - [flutter_svg](https://pub.dev/packages/flutter_svg) provides a Widget to render static SVG. We use flutter_svg to parse SVG.
 - [animated_svg](https://pub.dev/packages/animated_svg) makes smooth transitions between two different SVG.
 
