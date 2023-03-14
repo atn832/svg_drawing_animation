@@ -65,13 +65,14 @@ class SvgDrawingAnimation extends StatefulWidget {
   }
 
   @override
-  State<SvgDrawingAnimation> createState() =>
-      _SvgDrawingAnimationState(animation: animation);
+  State<SvgDrawingAnimation> createState() => _SvgDrawingAnimationState();
 }
 
 class _SvgDrawingAnimationState extends State<SvgDrawingAnimation>
     with SingleTickerProviderStateMixin {
-  _SvgDrawingAnimationState({this.animation});
+  _SvgDrawingAnimationState() {
+    animation = widget.animation;
+  }
 
   bool isInitialized = false;
   Animation<double>? animation;

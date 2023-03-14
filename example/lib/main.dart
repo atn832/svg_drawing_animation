@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     const Text('Custom controller: tap to replay'),
-                    ReplayableCard(),
+                    const ReplayableCard(),
                   ]),
             ),
           )),
@@ -86,7 +86,7 @@ class _ReplayableCardState extends State<ReplayableCard>
   @override
   void initState() {
     controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 5));
+        AnimationController(vsync: this, duration: const Duration(seconds: 5));
     controller.forward();
 
     super.initState();
