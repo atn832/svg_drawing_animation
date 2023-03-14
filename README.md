@@ -1,6 +1,7 @@
 # SVG Drawing Animation
 
 [![pub package](https://img.shields.io/pub/v/svg_drawing_animation.svg)](https://pub.dartlang.org/packages/svg_drawing_animation)
+<a href="https://www.buymeacoffee.com/anhtuann" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="30px" width= "108px"></a>
 
 Widget for drawing line animations of SVG. For now, it only renders paths. Feel free to propose pull requests if you want to support a new feature.
 
