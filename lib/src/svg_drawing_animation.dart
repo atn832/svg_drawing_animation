@@ -15,14 +15,16 @@ class SvgDrawingAnimation extends StatefulWidget {
       this.speed,
       this.curve = Curves.linear,
       this.repeats = false,
+      this.animation,
       this.loadingWidgetBuilder = defaultLoadingWidgetBuilder,
       this.errorWidgetBuilder = defaultErrorWidgetBuilder,
       this.penRenderer})
-      : assert(!(duration == null && speed == null),
-            'You must set a duration or speed.'),
+      : assert(!(duration == null && speed == null && animation == null),
+            'You must set a duration, speed or animation.'),
         assert(
-            duration != null && speed == null ||
-                speed != null && duration == null,
+            animation == null && duration != null && speed == null ||
+                animation == null && speed != null && duration == null ||
+                animation != null && speed == null && duration == null,
             'Only one of duration or speed can be used at a time.');
 
   /// Provides the SVG to display.
@@ -39,6 +41,9 @@ class SvgDrawingAnimation extends StatefulWidget {
 
   /// The curve to apply when animating.
   final Curve curve;
+
+  /// The animation.
+  final Animation<double>? animation;
 
   /// A builder that specifies the widget to display to the user while the SVG
   /// is still loading.
@@ -60,19 +65,24 @@ class SvgDrawingAnimation extends StatefulWidget {
   }
 
   @override
-  State<SvgDrawingAnimation> createState() => _SvgDrawingAnimationState();
+  State<SvgDrawingAnimation> createState() =>
+      _SvgDrawingAnimationState(animation: animation);
 }
 
 class _SvgDrawingAnimationState extends State<SvgDrawingAnimation>
     with SingleTickerProviderStateMixin {
+  _SvgDrawingAnimationState({this.animation});
+
   bool isInitialized = false;
-  late Animation<double> animation;
-  late AnimationController controller;
+  Animation<double>? animation;
+  AnimationController? controller;
   late final double totalPathLength;
 
   @override
   void dispose() {
-    if (isInitialized) controller.dispose();
+    if (controller != null) {
+      controller!.dispose();
+    }
     super.dispose();
   }
 
@@ -94,19 +104,22 @@ class _SvgDrawingAnimationState extends State<SvgDrawingAnimation>
             totalPathLength = SvgDrawingAnimation.getPathLengthSum(drawable);
             isInitialized = true;
 
-            final duration = widget.duration ??
-                Duration(milliseconds: 1000 * totalPathLength ~/ widget.speed!);
-            controller = AnimationController(duration: duration, vsync: this);
-            animation =
-                CurvedAnimation(parent: controller, curve: widget.curve);
-            if (widget.repeats) {
-              controller.repeat();
-            } else {
-              controller.forward();
+            if (animation == null) {
+              final duration = widget.duration ??
+                  Duration(
+                      milliseconds: 1000 * totalPathLength ~/ widget.speed!);
+              controller = AnimationController(duration: duration, vsync: this);
+              animation =
+                  CurvedAnimation(parent: controller!, curve: widget.curve);
+              if (widget.repeats) {
+                controller!.repeat();
+              } else {
+                controller!.forward();
+              }
             }
           }
           return AnimatedBuilder(
-              animation: animation,
+              animation: animation!,
               builder: (context, child) {
                 return FittedBox(
                     child: SizedBox.fromSize(
@@ -114,7 +127,7 @@ class _SvgDrawingAnimationState extends State<SvgDrawingAnimation>
                         child: CustomPaint(
                             painter: ClippedPathPainter(snapshot.data!,
                                 pathLengthLimit:
-                                    animation.value * totalPathLength,
+                                    animation!.value * totalPathLength,
                                 penRenderer: widget.penRenderer))));
               });
         });
