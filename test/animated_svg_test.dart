@@ -13,6 +13,7 @@ import 'package:svg_drawing_animation/src/clipped_path_painter.dart';
 import 'package:svg_drawing_animation/svg_drawing_animation.dart';
 
 import 'animated_svg_test.mocks.dart';
+import 'golden.dart';
 import 'kanji_svg.dart';
 
 // A line of length 1, transformed by a scale(2, 1). So the render length is 2.
@@ -209,8 +210,8 @@ Future<void> renderAndCheckGoldensWidget(
                   child: SizedBox(width: 300, height: 300, child: widget))))));
   await widgetTester.pumpAndSettle(const Duration(seconds: 20));
 
-  await expectLater(find.byType(MaterialApp),
-      matchesGoldenFile('goldens/render_$description.png'));
+  await expectGoldenMatches(
+      find.byType(MaterialApp), 'goldens/render_$description.png');
 }
 
 Future<void> renderAndCheckGoldens(WidgetTester widgetTester,
@@ -247,8 +248,8 @@ Future<void> renderClippedPathPainterAndCheckGoldens(WidgetTester widgetTester,
 
   await widgetTester.pumpAndSettle();
 
-  await expectLater(find.byType(MaterialApp),
-      matchesGoldenFile('goldens/clipped_path_$description.png'));
+  await expectGoldenMatches(
+      find.byType(MaterialApp), 'goldens/clipped_path_$description.png');
 }
 
 class FixedAnimation implements ValueListenable<double> {
