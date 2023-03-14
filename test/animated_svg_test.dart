@@ -211,7 +211,7 @@ Future<void> renderAndCheckGoldensWidget(
   await widgetTester.pumpAndSettle(const Duration(seconds: 20));
 
   await expectGoldenMatches(
-      find.byType(MaterialApp), 'goldens/render_$description.png');
+      find.byType(MaterialApp), 'render_$description.png');
 }
 
 Future<void> renderAndCheckGoldens(WidgetTester widgetTester,
@@ -249,7 +249,7 @@ Future<void> renderClippedPathPainterAndCheckGoldens(WidgetTester widgetTester,
   await widgetTester.pumpAndSettle();
 
   await expectGoldenMatches(
-      find.byType(MaterialApp), 'goldens/clipped_path_$description.png');
+      find.byType(MaterialApp), 'clipped_path_$description.png');
 }
 
 class FixedAnimation implements ValueListenable<double> {
