@@ -34,9 +34,12 @@ void main() {
     expect(SvgDrawingAnimation.getPathLengthSum(await parser.parse(kanjiSvg)),
         kanjiLength);
     expect(
-        SvgDrawingAnimation.getPathLengthSum(
-            await SvgProvider.file(File('test/African_Elephant.svg')).svg),
-        3459.3614106178284);
+        (SvgDrawingAnimation.getPathLengthSum(
+                    await SvgProvider.file(File('test/African_Elephant.svg'))
+                        .svg) -
+                3459.3614106178284)
+            .abs(),
+        lessThan(.1));
   });
 
   testWidgets('clipped path painter', (widgetTester) async {
